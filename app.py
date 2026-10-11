@@ -10,6 +10,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="María Carolina | Data Scientist", page_icon="✦", layout="wide")
 
@@ -43,6 +44,15 @@ ICON = {
     "cloud": '<path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 11a3.5 3.5 0 0 0 1 7z"/>',
 }
 
+# Tableau Public: publish the workbook, then paste each dashboard's share link here.
+# Example: "https://public.tableau.com/views/EasyLoans2023/LOANOPERATIONS"
+# While a link is empty, the app shows the project tile without the embedded dashboard.
+TABLEAU_DASHBOARDS = {
+    "Loan operations": "",
+    "Merchant analysis": "",
+}
+TABLEAU_PROFILE = ""  # e.g. "https://public.tableau.com/app/profile/your.name"
+
 CAPABILITIES = [
     ("ml", "Machine learning that holds up",
      "Models judged on data they have never seen. Gradient boosting, careful validation, tuned with Optuna.",
@@ -56,9 +66,9 @@ CAPABILITIES = [
     ("ship", "From notebook to product",
      "Models served behind an API, tested, versioned and wrapped in a dashboard.",
      "FastAPI · MLflow · pytest · Streamlit", "Restaurant NLP"),
-    ("stats", "Statistics with judgment",
-     "The right test for the question, with honest uncertainty instead of overconfident claims.",
-     "Hypothesis testing · ANOVA · Confidence intervals · Regression", "Glucose study · Restaurant NLP"),
+    ("stats", "Statistics people can read",
+     "The right test for the question, then a dashboard a manager understands in seconds.",
+     "Hypothesis testing · ANOVA · Regression · Tableau · Plotly", "Glucose study · Easy Loans dashboards"),
     ("cloud", "Ready for scale",
      "Trained on distributed and cloud tools during my M.Sc. at Complutense University of Madrid.",
      "PySpark · Spark SQL · MLlib · Google Cloud · MongoDB · Snowflake", "M.Sc. coursework"),
@@ -67,151 +77,194 @@ CAPABILITIES = [
 # =============================================================================
 # STYLE
 # =============================================================================
-BLUE = "#0071E3"
-INK = "#1D1D1F"
-SUB = "#6E6E73"
-LINE = "#D2D2D7"
-SOFT = "#F5F5F7"
+BLUE = "#7C74E8"   # soft violet accent
+INK = "#1F2347"
+SUB = "#5E6388"
+LINE = "#D5DAF5"
+SOFT = "#F1F3FD"
 
 html(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-:root {{ --ink:{INK}; --sub:{SUB}; --blue:{BLUE}; --line:{LINE}; --soft:{SOFT}; }}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
+:root {{
+  --ink:{INK}; --sub:{SUB}; --violet:{BLUE}; --line:{LINE}; --soft:{SOFT};
+  --plum:#2E3270; --sky:#8FB4F5; --lilac:#B9A9F5; --pearl:#F8F9FF;
+  --glass: rgba(255,255,255,.42); --glass-strong: rgba(255,255,255,.62);
+  --edge: rgba(255,255,255,.75);
+  --shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 -1px 0 rgba(110,120,210,.08) inset, 0 12px 40px rgba(46,50,112,.10);
+  --serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}}
 html, body, .stApp, .stApp :is(h1,h2,h3,h4,h5,p,span,div,a,b,li,label,button,input,small,textarea):not([data-testid="stIconMaterial"]):not(.material-symbols-rounded) {{
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
 }}
-.stApp {{ background: #FBFBFD; }}
+.stApp.stApp.stApp.stApp :is(h1,h2,h3,h4,b,em) :is(span,em) {{ font-family: inherit !important; }}
+/* Soft lavender and periwinkle light, so the glass has something to refract */
+.stApp {{
+  background:
+    radial-gradient(42vw 42vw at 8% 4%, rgba(190,178,255,.55), transparent 60%),
+    radial-gradient(40vw 40vw at 94% 12%, rgba(158,196,255,.60), transparent 60%),
+    radial-gradient(46vw 46vw at 72% 68%, rgba(205,194,255,.45), transparent 62%),
+    radial-gradient(38vw 38vw at 10% 84%, rgba(170,206,255,.45), transparent 60%),
+    linear-gradient(180deg, #F5F4FF 0%, #EEF3FF 50%, #F3F1FD 100%);
+  background-attachment: fixed;
+}}
 header[data-testid="stHeader"], #MainMenu, footer, [data-testid="stToolbar"], [data-testid="stDecoration"] {{ display: none !important; }}
 .block-container {{ max-width: 1080px; padding: 0 1.4rem 4rem 1.4rem; }}
-section.main > div {{ padding-top: 0; }}
 
-/* Navigation: frosted glass bar */
+/* Liquid glass recipe */
+.glass, .tile, .feature.light, .st-key-demo, .st-key-bi, .scoreboard, .nav {{
+  background: var(--glass);
+  backdrop-filter: blur(26px) saturate(170%); -webkit-backdrop-filter: blur(26px) saturate(170%);
+  border: 1px solid var(--edge); box-shadow: var(--shadow); position: relative;
+}}
+.tile::before, .feature.light::before {{
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25) 100%);
+  mix-blend-mode: soft-light;
+}}
+
+/* Navigation */
 .nav {{
-  position: fixed; top: 0; left: 0; right: 0; z-index: 999; height: 52px;
-  display: flex; align-items: center; justify-content: center; gap: 2.2rem;
-  background: rgba(251,251,253,.72); backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.06);
-  font-size: .82rem;
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 999; height: 48px;
+  display: flex; align-items: center; gap: 1.9rem; padding: 0 .6rem 0 1.4rem; border-radius: 980px;
+  font-size: .84rem; width: max-content; max-width: calc(100vw - 24px);
 }}
-.nav a {{ color: var(--ink); text-decoration: none; opacity: .8; }}
-.nav a:hover {{ opacity: 1; }}
-.nav .brand {{ font-weight: 600; opacity: 1; margin-right: 1rem; }}
-.nav .cta {{ background: var(--blue); color: #fff; opacity: 1; padding: .3rem .85rem; border-radius: 980px; }}
+.nav a {{ color: var(--ink); text-decoration: none; opacity: .78; }}
+.nav a:hover {{ opacity: 1; }} .stApp.stApp.stApp .nav .brand {{ font-family: var(--serif) !important; font-size: 1.15rem; font-weight: 700; opacity: 1; margin-right: .4rem; color: var(--plum); }}
+.nav .cta {{ background: var(--plum); color: #fff; opacity: 1; padding: .42rem 1rem; border-radius: 980px; }}
 
-/* Hero */
-.hero {{ text-align: center; padding: 8.5rem 0 3.5rem 0; }}
-.hero .hello {{ font-size: 1.35rem; font-weight: 600; color: var(--sub); margin: 0 0 .4rem 0; }}
-.hero h1 {{
-  font-size: clamp(3.4rem, 9vw, 6.6rem); line-height: 1.02; font-weight: 800; letter-spacing: -0.045em; margin: 0;
-  background: linear-gradient(100deg, #1D1D1F 10%, #0071E3 55%, #7A5AF8 90%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
+/* Hero with faint court lines */
+.hero {{ position: relative; text-align: center; padding: 8.8rem 0 3rem 0; }}
+.hero .court {{ position: absolute; inset: 4.5rem 0 0 0; width: 100%; height: 100%; opacity: .55; pointer-events: none; z-index: 0; }}
+.hero > *:not(.court) {{ position: relative; z-index: 1; }} .stApp.stApp.stApp .hero .hello {{ font-family: var(--serif) !important; font-style: italic; font-size: 1.6rem; color: var(--sub); margin: 0 0 .2rem 0; }} .stApp.stApp.stApp .hero h1 {{
+  font-family: var(--serif) !important; font-weight: 600; font-size: clamp(3.6rem, 10vw, 7.2rem);
+  line-height: .98; letter-spacing: -0.02em; margin: 0; color: var(--plum);
+  animation: rise 1s cubic-bezier(.2,.7,.2,1) both;
 }}
-.hero .tagline {{ font-size: clamp(1.5rem, 3.4vw, 2.3rem); font-weight: 600; letter-spacing: -0.02em; color: var(--ink); margin: 1.1rem auto .8rem auto; max-width: 30ch; line-height: 1.15; }}
-.hero .lede {{ font-size: 1.15rem; color: var(--sub); max-width: 52ch; margin: 0 auto 2rem auto; line-height: 1.55; }}
-@keyframes rise {{ from {{ opacity: 0; transform: translateY(18px); }} to {{ opacity: 1; transform: none; }} }}
+.hero h1 em {{ font-style: italic; color: var(--violet); }}
+.hero .tagline {{ font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; color: var(--ink); margin: 1.3rem auto .8rem auto; max-width: 30ch; line-height: 1.2; }}
+.hero .lede {{ font-size: 1.12rem; color: var(--sub); max-width: 52ch; margin: 0 auto 2rem auto; line-height: 1.6; }}
+@keyframes rise {{ from {{ opacity: 0; transform: translateY(16px); }} to {{ opacity: 1; transform: none; }} }}
 @media (prefers-reduced-motion: reduce) {{ .hero h1 {{ animation: none; }} }}
 
-.btn {{ display: inline-block; padding: .75rem 1.35rem; border-radius: 980px; font-size: 1rem; font-weight: 500; text-decoration: none !important; margin: .25rem .3rem; transition: background .2s, color .2s; }}
-.btn-primary {{ background: var(--blue); color: #fff !important; }}
-.btn-primary:hover {{ background: #0077ED; }}
-.btn-ghost {{ color: var(--blue) !important; border: 1px solid var(--blue); }}
-.btn-ghost:hover {{ background: var(--blue); color: #fff !important; }}
-.btn:focus-visible, .nav a:focus-visible {{ outline: 3px solid rgba(0,113,227,.45); outline-offset: 2px; }}
+.btn {{ display: inline-block; padding: .78rem 1.4rem; border-radius: 980px; font-size: 1rem; font-weight: 500; text-decoration: none !important; margin: .25rem .3rem; transition: background .25s, color .25s, box-shadow .25s; }}
+.btn-primary {{ background: var(--plum); color: #fff !important; box-shadow: 0 6px 20px rgba(46,50,112,.28); }}
+.btn-primary:hover {{ background: #3B4090; }}
+.btn-ghost {{ color: var(--plum) !important; background: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.85); backdrop-filter: blur(14px); box-shadow: var(--shadow); }}
+.btn-ghost:hover {{ background: rgba(255,255,255,.75); }}
+.btn:focus-visible, .nav a:focus-visible {{ outline: 3px solid rgba(124,116,232,.45); outline-offset: 2px; }}
 
-/* Stats strip */
-.stats {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1rem 0 5rem 0; }}
-.stat {{ text-align: center; padding: 1.3rem .5rem; }}
-.stat b {{ display: block; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; color: var(--ink); }}
-.stat span {{ color: var(--sub); font-size: .95rem; }}
+/* Scoreboard: a centre-court results board in frosted glass */
+.scoreboard {{
+  display: grid; grid-template-columns: repeat(4, 1fr); margin: 1.4rem 0 5.5rem 0; border-radius: 26px; overflow: hidden;
+}}
+.scoreboard .cell {{ text-align: center; padding: 1.6rem .6rem 1.4rem .6rem; border-right: 1px solid rgba(46,50,112,.10); }}
+.scoreboard .cell:last-child {{ border-right: none; }} .stApp.stApp.stApp .scoreboard b {{ display: block; font-family: var(--serif) !important; font-weight: 600; font-size: clamp(2.2rem, 4.6vw, 3.2rem); color: var(--plum); letter-spacing: -0.01em; line-height: 1.1; }}
+.scoreboard span {{ color: var(--sub); font-size: .9rem; }}
 
 /* Section headings */
-.section {{ text-align: center; margin: 0 auto 2.4rem auto; max-width: 720px; scroll-margin-top: 70px; }}
-.section h2 {{ font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.07; margin: 0 0 .7rem 0; color: var(--ink); }}
-.section p {{ font-size: 1.2rem; color: var(--sub); line-height: 1.5; margin: 0; }}
+.section {{ text-align: center; margin: 0 auto 2.4rem auto; max-width: 720px; scroll-margin-top: 80px; }} .stApp.stApp.stApp .section h2 {{ font-family: var(--serif) !important; font-weight: 600; font-size: clamp(2.5rem, 5.6vw, 3.9rem); letter-spacing: -0.015em; line-height: 1.02; margin: 0 0 .7rem 0; color: var(--plum); }}
+.section p {{ font-size: 1.15rem; color: var(--sub); line-height: 1.55; margin: 0; }}
 
-/* Bento grid */
+/* Capability tiles */
 .bento {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-bottom: 6rem; }}
-.tile {{ background: #fff; border-radius: 28px; padding: 1.8rem 1.6rem; box-shadow: 0 2px 6px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.05); }}
-.tile .icon {{ width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, #0071E3, #7A5AF8); }}
+.tile {{ border-radius: 28px; padding: 1.8rem 1.6rem; }}
+.tile .icon {{ width: 46px; height: 46px; border-radius: 15px; display: grid; place-items: center; color: var(--plum);
+  background: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 4px 14px rgba(46,50,112,.12); }}
 .tile .icon svg {{ width: 24px; height: 24px; }}
-.tile h3 {{ font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin: .7rem 0 .45rem 0; color: var(--ink); }}
-.tile p {{ color: var(--sub); line-height: 1.5; margin: 0 0 1rem 0; font-size: .98rem; }}
-.tile .tools {{ font-size: .85rem; color: var(--ink); line-height: 1.5; }}
-.tile .proof {{ font-size: .82rem; color: var(--blue); margin-top: .6rem; }}
+.tile h3 {{ font-size: 1.22rem; font-weight: 650; letter-spacing: -0.015em; margin: .8rem 0 .45rem 0; color: var(--ink); }}
+.tile p {{ color: var(--sub); line-height: 1.55; margin: 0 0 1rem 0; font-size: .97rem; }}
+.tile .tools {{ font-size: .85rem; color: var(--ink); line-height: 1.55; }}
+.tile .proof {{ font-size: .82rem; color: var(--violet); margin-top: .7rem; font-weight: 500; }}
+.tile .proof::before {{ content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--sky), var(--lilac)); margin-right: .45rem; vertical-align: middle; }}
 
-/* Featured project tiles */
-.feature {{ border-radius: 32px; padding: 3rem 2.6rem; margin-bottom: 1.1rem; overflow: hidden; scroll-margin-top: 70px; }}
-.feature.dark {{ background: radial-gradient(120% 140% at 85% 0%, #1E3A8A 0%, #0B1020 55%, #000 100%); color: #F5F5F7; }}
-.feature.light {{ background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.05); }}
-.feature .kicker {{ font-size: 1rem; font-weight: 600; color: #6CB4FF; margin: 0 0 .5rem 0; }}
-.feature.light .kicker {{ color: var(--blue); }}
-.feature h3 {{ font-size: clamp(2rem, 4.4vw, 3rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; margin: 0 0 1rem 0; max-width: 18ch; }}
-.feature.light h3 {{ color: var(--ink); }}
-.feature .desc {{ font-size: 1.15rem; line-height: 1.55; max-width: 56ch; margin: 0 0 2rem 0; opacity: .82; }}
+/* Feature tiles */
+.feature {{ border-radius: 32px; padding: 3rem 2.6rem; margin-bottom: 1.1rem; overflow: hidden; scroll-margin-top: 80px; position: relative; }}
+.feature.dark {{
+  background: radial-gradient(110% 130% at 92% 0%, #9AA8FF 0%, #5C64CF 38%, #33378A 72%, #24275C 100%); color: #F8F9FF;
+  border: 1px solid rgba(255,255,255,.35); box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 24px 60px rgba(46,50,112,.30);
+}}
+.feature .kicker {{ font-size: .95rem; font-weight: 600; color: #D9DEFF; margin: 0 0 .6rem 0; }}
+.feature.light .kicker {{ color: var(--violet); }} .stApp.stApp.stApp .feature h3 {{ font-family: var(--serif) !important; font-weight: 600; font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -0.01em; line-height: 1.02; margin: 0 0 1rem 0; max-width: 18ch; }}
+.feature.light h3 {{ color: var(--plum); }}
+.feature .desc {{ font-size: 1.1rem; line-height: 1.6; max-width: 56ch; margin: 0 0 2rem 0; opacity: .85; }}
 .feature.light .desc {{ color: var(--sub); opacity: 1; }}
-.feature.dark .metrics {{ gap: 1.8rem; }}
+.feature.dark .metrics {{ gap: 1.5rem; }}
+.stApp.stApp.stApp.stApp .feature.dark .metrics div b {{ font-size: 2.15rem; }}
 .split {{ display: grid; grid-template-columns: 1.25fr 1fr; gap: 2.4rem; align-items: center; }}
 .mock {{ display: flex; flex-direction: column; gap: .8rem; }}
-.review {{ background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(12px); border-radius: 18px; padding: 1rem 1.1rem; }}
-.review p {{ margin: 0 0 .6rem 0; font-size: .98rem; line-height: 1.45; color: #F5F5F7; }}
-.tag {{ font-size: .78rem; font-weight: 600; padding: .2rem .6rem; border-radius: 980px; }}
-.tag.neg {{ background: rgba(255,69,58,.18); color: #FF6961; }}
-.tag.pos {{ background: rgba(48,209,88,.18); color: #4CD964; }}
-.tag.neu {{ background: rgba(255,214,10,.16); color: #FFD60A; }}
-.alert {{ font-size: .88rem; color: #FFD60A; padding: .2rem .2rem; }}
-.metrics {{ display: flex; flex-wrap: wrap; gap: 2.6rem; margin-bottom: 2rem; }}
-.metrics div b {{ display: block; font-size: 2.3rem; font-weight: 700; letter-spacing: -0.03em; }}
-.metrics div span {{ font-size: .9rem; opacity: .7; }}
-.feature.light .metrics b {{ color: var(--ink); }}
+.review {{ background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); backdrop-filter: blur(16px); border-radius: 20px; padding: 1rem 1.1rem; box-shadow: 0 1px 0 rgba(255,255,255,.3) inset; }}
+.review p {{ margin: 0 0 .6rem 0; font-size: .98rem; line-height: 1.45; color: #F7F5FF; }}
+.tag {{ font-size: .78rem; font-weight: 600; padding: .2rem .65rem; border-radius: 980px; }}
+.tag.neg {{ background: rgba(255,170,190,.22); color: #FFD0DA; }}
+.tag.pos {{ background: rgba(170,210,255,.24); color: #D6E8FF; }}
+.tag.neu {{ background: rgba(215,200,255,.24); color: #E6DDFF; }}
+.alert {{ font-size: .88rem; color: #E6DDFF; padding: .2rem; font-style: italic; }}
+.metrics {{ display: flex; flex-wrap: wrap; gap: 2.4rem; margin-bottom: 2rem; }} .stApp.stApp.stApp .metrics div b {{ display: block; font-family: var(--serif) !important; font-size: 2.5rem; font-weight: 600; line-height: 1.05; }}
+.metrics div span {{ font-size: .88rem; opacity: .75; }}
+.feature.light .metrics b {{ color: var(--plum); }}
 .feature.light .metrics span {{ color: var(--sub); opacity: 1; }}
-.feature .btn-ghost.on-dark {{ color: #fff !important; border-color: rgba(255,255,255,.6); }}
-.feature .btn-ghost.on-dark:hover {{ background: #fff; color: #000 !important; }}
 .trio {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-bottom: 6rem; }}
-.trio .feature {{ margin-bottom: 0; padding: 2.4rem 2rem; }}
-.trio .feature h3 {{ font-size: clamp(1.45rem, 2.4vw, 1.8rem); }}
-.trio .feature .desc {{ font-size: 1rem; }}
+.trio .feature {{ margin-bottom: 0; padding: 2.3rem 1.9rem; }}
+.stApp.stApp.stApp.stApp .trio .feature h3 {{ font-size: clamp(1.55rem, 2.2vw, 1.85rem); }}
+.trio .feature .desc {{ font-size: .98rem; }}
 .trio .metrics {{ gap: 1.6rem; }}
-.trio .metrics b {{ font-size: 1.9rem !important; }}
+.trio .metrics b {{ font-size: 2.1rem !important; }}
 
-/* Live demo frame */
-.demo-head {{ scroll-margin-top: 70px; }}
-.st-key-demo {{ background: #fff; border-radius: 28px; padding: 2rem 2rem 1.2rem 2rem; box-shadow: 0 2px 6px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.05); }}
-.check {{ font-size: .98rem; margin: .35rem 0; color: var(--ink); }}
-.check .ok {{ color: #1A9E55; font-weight: 700; margin-right: .4rem; }}
-.check .ko {{ color: #D93025; font-weight: 700; margin-right: .4rem; }}
+/* Dashboards */
+.bi {{ margin-bottom: 1.1rem; }}
+.bi-list {{ display: flex; flex-direction: column; gap: .8rem; }}
+.bi-list div {{ background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.85); border-radius: 20px; padding: 1rem 1.2rem; }}
+.bi-list b {{ display: block; color: var(--ink); font-size: 1rem; margin-bottom: .2rem; }}
+.bi-list span {{ color: var(--sub); font-size: .92rem; line-height: 1.45; }}
+.st-key-bi {{ border-radius: 28px; padding: 1.4rem; }}
+.st-key-bi iframe {{ border-radius: 18px; }}
+
+/* Live demo */
+.demo-head {{ scroll-margin-top: 80px; }}
+.st-key-demo {{ border-radius: 30px; padding: 2rem 2rem 1.2rem 2rem; }}
+.check {{ font-size: .98rem; margin: .38rem 0; color: var(--ink); }}
+.check .ok {{ color: var(--violet); font-weight: 700; margin-right: .45rem; }}
+.check .ko {{ color: #C9577A; font-weight: 700; margin-right: .45rem; }}
 .pipeline {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin: .6rem 0 1.2rem 0; }}
-.step {{ background: var(--soft); border-radius: 18px; padding: 1rem 1.1rem; }}
-.step small {{ color: var(--sub); font-size: .82rem; }}
-.step b {{ display: block; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }}
-.stButton button, .stDownloadButton button {{ border-radius: 980px !important; }}
+.step {{ background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.9); border-radius: 20px; padding: 1rem 1.1rem; }}
+.step small {{ color: var(--sub); font-size: .82rem; }} .stApp.stApp.stApp .step b {{ display: block; font-family: var(--serif) !important; font-size: 2rem; font-weight: 600; color: var(--plum); line-height: 1.1; }}
+.stButton button, .stDownloadButton button {{ border-radius: 980px !important; background: rgba(255,255,255,.6) !important; border: 1px solid rgba(255,255,255,.9) !important; }}
+[data-testid="stExpander"] details {{ border-radius: 18px; background: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.85); }}
+div[data-baseweb="input"], div[data-baseweb="base-input"] {{ background: rgba(255,255,255,.6) !important; border-radius: 12px; }}
 
 /* Why me */
-.why {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem; margin: 0 0 6rem 0; }}
-.why h4 {{ font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 .5rem 0; color: var(--ink); }}
-.why p {{ color: var(--sub); line-height: 1.55; margin: 0; }}
-.journey {{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: -2rem 0 6rem 0; border-top: 2px solid var(--line); padding-top: 1.6rem; position: relative; }}
+.why {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem; margin: 0 0 6rem 0; }} .stApp.stApp.stApp .why h4 {{ font-family: var(--serif) !important; font-size: 1.6rem; font-weight: 600; line-height: 1.1; margin: 0 0 .5rem 0; color: var(--plum); }}
+.why p {{ color: var(--sub); line-height: 1.6; margin: 0; }}
+.journey {{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: -2rem 0 6rem 0; border-top: 2px solid rgba(255,255,255,.95); padding-top: 1.6rem; position: relative; box-shadow: 0 -1px 0 rgba(46,50,112,.12); }}
 .stop {{ position: relative; }}
-.stop::before {{ content: ""; position: absolute; top: -2.05rem; left: 0; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--line); }}
-.stop.now::before {{ background: var(--blue); border-color: var(--blue); box-shadow: 0 0 0 5px rgba(0,113,227,.15); }}
-.stop .year {{ display: block; font-size: .85rem; color: var(--blue); font-weight: 600; margin-bottom: .3rem; }}
+.stop::before {{ content: ""; position: absolute; top: -2.05rem; left: 0; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid rgba(46,50,112,.25); }}
+.stop.now::before {{ background: var(--violet); border-color: var(--violet); box-shadow: 0 0 0 5px rgba(124,116,232,.22); }}
+.stop .year {{ display: block; font-size: .85rem; color: var(--violet); font-weight: 600; margin-bottom: .3rem; }}
 .stop b {{ display: block; font-size: .98rem; color: var(--ink); line-height: 1.3; margin-bottom: .25rem; }}
 .stop small {{ color: var(--sub); font-size: .85rem; line-height: 1.35; }}
 
 /* Contact */
-.contact {{ background: #000; color: #F5F5F7; border-radius: 32px; text-align: center; padding: 4.5rem 1.5rem; scroll-margin-top: 70px; }}
-.contact h2 {{ font-size: clamp(2.3rem, 5.4vw, 3.8rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; margin: 0 0 1rem 0; }}
-.contact p {{ color: #A1A1A6; font-size: 1.2rem; max-width: 46ch; margin: 0 auto 2rem auto; line-height: 1.5; }}
-.contact .btn-ghost {{ color: #fff !important; border-color: rgba(255,255,255,.6); }}
+.contact {{
+  background: radial-gradient(110% 150% at 12% 0%, #9AA8FF 0%, #5C64CF 40%, #33378A 75%, #24275C 100%);
+  color: #F8F9FF; border-radius: 34px; text-align: center; padding: 4.6rem 1.5rem; scroll-margin-top: 80px;
+  border: 1px solid rgba(255,255,255,.25); box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 24px 60px rgba(46,50,112,.30);
+}} .stApp.stApp.stApp .contact .small {{ font-family: var(--serif) !important; font-style: italic; font-size: 1.5rem; color: #D9DEFF; margin: 0 0 .3rem 0; }} .stApp.stApp.stApp .contact h2 {{ font-family: var(--serif) !important; font-weight: 600; font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: 1.02; margin: 0 0 1rem 0; }}
+.contact p {{ color: rgba(248,249,255,.8); font-size: 1.15rem; max-width: 46ch; margin: 0 auto 2rem auto; line-height: 1.55; }}
+.contact .btn-primary {{ background: #fff; color: var(--plum) !important; }}
+.contact .btn-ghost {{ color: #fff !important; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); box-shadow: none; }}
+.contact .btn-ghost:hover {{ background: rgba(255,255,255,.22); }}
 .foot {{ text-align: center; color: var(--sub); font-size: .82rem; margin-top: 2rem; }}
 
 @media (max-width: 820px) {{
-  .nav {{ gap: 1rem; font-size: .76rem; }} .nav .hide-sm {{ display: none; }}
-  .stats {{ grid-template-columns: repeat(2, 1fr); }}
+  .nav {{ gap: .9rem; font-size: .76rem; padding: 0 .4rem 0 1rem; }} .nav .hide-sm {{ display: none; }}
+  .scoreboard {{ grid-template-columns: repeat(2, 1fr); }}
+  .scoreboard .cell:nth-child(2) {{ border-right: none; }}
+  .scoreboard .cell:nth-child(-n+2) {{ border-bottom: 1px solid rgba(46,50,112,.10); }}
   .bento, .trio, .why, .pipeline, .split, .journey {{ grid-template-columns: 1fr; }}
   .feature {{ padding: 2.2rem 1.5rem; }}
-  .journey {{ border-top: none; border-left: 2px solid var(--line); padding: 0 0 0 1.4rem; margin-top: 0; gap: 1.4rem; }}
+  .journey {{ border-top: none; border-left: 2px solid rgba(255,255,255,.95); padding: 0 0 0 1.4rem; margin-top: 0; gap: 1.4rem; box-shadow: none; }}
   .stop::before {{ top: .15rem; left: -1.92rem; }}
 }}
 </style>
@@ -225,23 +278,25 @@ html(f"""
 <a class="brand" href="#top">María Carolina</a>
 <a href="#skills">What I do</a>
 <a href="#work">Work</a>
+<a class="hide-sm" href="#dashboards">Dashboards</a>
 <a class="hide-sm" href="#demo">Live demo</a>
 <a class="hide-sm" href="#about">About</a>
 <a class="cta" href="#contact">Let's talk</a>
 </nav>
 <div class="hero" id="top">
+<svg class="court" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true" fill="none" stroke="#FFFFFF" stroke-width="3"><rect x="80" y="40" width="840" height="440" rx="4"/><line x1="80" y1="95" x2="920" y2="95"/><line x1="80" y1="425" x2="920" y2="425"/><line x1="260" y1="95" x2="260" y2="425"/><line x1="740" y1="95" x2="740" y2="425"/><line x1="260" y1="260" x2="740" y2="260"/><line x1="500" y1="30" x2="500" y2="490" stroke-width="5" stroke-dasharray="2 9"/></svg>
 <p class="hello">Hi, I'm</p>
-<h1>María Carolina.</h1>
+<h1>María <em>Carolina.</em></h1>
 <p class="tagline">I turn messy data into models and pipelines that ship.</p>
 <p class="lede">Data Scientist with a data engineer's habits: clean inputs, honest validation and products people can actually click on.</p>
 <a class="btn btn-primary" href="#work">See my work</a>
 <a class="btn btn-ghost" href="#demo">Try the live pipeline</a>
 </div>
-<div class="stats">
-<div class="stat"><b>1.16M</b><span>reviews modeled</span></div>
-<div class="stat"><b>0.808</b><span>macro F1 on unseen data</span></div>
-<div class="stat"><b>0.8132</b><span>DrivenData leaderboard</span></div>
-<div class="stat"><b>3</b><span>languages: ES, EN, DE</span></div>
+<div class="scoreboard">
+<div class="cell"><b>1.16M</b><span>reviews modeled</span></div>
+<div class="cell"><b>0.808</b><span>macro F1 on unseen data</span></div>
+<div class="cell"><b>0.8132</b><span>DrivenData leaderboard</span></div>
+<div class="cell"><b>3</b><span>languages: ES, EN, DE</span></div>
 </div>
 """)
 
@@ -312,6 +367,51 @@ html(f"""
 </div>
 </div>
 """)
+
+# =============================================================================
+# BUSINESS INTELLIGENCE (Tableau)
+# =============================================================================
+live_views = {name: url for name, url in TABLEAU_DASHBOARDS.items() if url.strip()}
+profile_btn = (f"<a class='btn btn-ghost' href='{TABLEAU_PROFILE}' target='_blank'>See it on Tableau Public</a>"
+               if TABLEAU_PROFILE else "")
+html(f"""
+<div class="section" id="dashboards">
+<h2>Dashboards people act on.</h2>
+<p>Numbers are only useful when a manager can read them in ten seconds.</p>
+</div>
+<div class="feature light bi">
+<div class="split"><div>
+<p class="kicker">Business intelligence · Tableau</p>
+<h3>Easy Loans: a year of lending, at a glance.</h3>
+<p class="desc">Two interactive dashboards on 2023 loan operations across Europe. Track volume and running totals over time, spot which operations sit above or below the average, and find the top merchants in every country on a map.</p>
+<div class="metrics">
+<div><b>2</b><span>dashboards</span></div>
+<div><b>7</b><span>linked views</span></div>
+<div><b>LOD</b><span>and table calculations</span></div>
+</div>
+{profile_btn}
+</div>
+<div class="bi-list">
+<div><b>Loan operations</b><span>KPIs, deviation from the average, running total, date and country filters</span></div>
+<div><b>Merchant analysis</b><span>Top 10 merchants, merchants by country, interactive map</span></div>
+<div><b>Built for the user</b><span>Minimum-amount parameter and one-click reset buttons</span></div>
+</div>
+</div>
+</div>
+""")
+if live_views:
+    with st.container(key="bi"):
+        view = st.segmented_control("Dashboard", list(live_views), default=list(live_views)[0],
+                                    label_visibility="collapsed") or list(live_views)[0]
+        url = live_views[view]
+        sep = "&" if "?" in url else "?"
+        src = f"{url}{sep}:showVizHome=no&:embed=true&:toolbar=bottom"
+        if hasattr(st, "iframe"):
+            st.iframe(src, height=860)
+        else:
+            components.iframe(src, height=860, scrolling=True)
+        st.caption("Interactive: filter by date and country, hover for details, click a bar or map point to cross-filter.")
+html("<div style='height:6rem'></div>")
 
 # =============================================================================
 # LIVE DEMO (hostname pipeline)
@@ -417,7 +517,7 @@ with st.container(key="demo"):
             for name, ok in report["checks"].items()
         )
         worst = report["distribution"]["gap_pp"].max()
-        dup_note = (f"<div class='check' style='color:#D93025'>{report['duplicates']} duplicate hostnames found.</div>"
+        dup_note = (f"<div class='check' style='color:#C9577A'>{report['duplicates']} duplicate hostnames found.</div>"
                     if report["duplicates"] else "")
         html(f"{items}{dup_note}<p style='color:{SUB};margin-top:1rem'>Largest gap from the target mix: "
              f"<b style='color:{INK}'>{worst:.1f} percentage points</b>.</p>")
@@ -434,18 +534,18 @@ with st.container(key="demo"):
         fig.add_bar(x=dist["category"], y=dist["observed"] * 100, name="Observed", marker_color=BLUE)
         fig.update_traces(marker_line_width=0)
         fig.update_layout(barmode="group", height=300, margin=dict(l=0, r=0, t=10, b=0), bargap=.35,
-                          yaxis=dict(title="Share of servers (%)", gridcolor="#EEE"),
+                          yaxis=dict(title="Share of servers (%)", gridcolor="rgba(46,50,112,.08)"),
                           legend=dict(orientation="h", y=1.12, x=0), plot_bgcolor="rgba(0,0,0,0)",
                           paper_bgcolor="rgba(0,0,0,0)", font=PLOT_FONT)
         st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
     pivot = data.groupby(["country", "environment"]).size().reset_index(name="servers")
     fig2 = px.bar(pivot, x="country", y="servers", color="environment", height=300,
-                  color_discrete_sequence=[BLUE, "#7A5AF8", "#5AC8FA", "#1D1D1F", "#C7C7CC"])
+                  color_discrete_sequence=["#2E3270", BLUE, "#8FB4F5", "#B9A9F5", "#D5DAF5"])
     fig2.update_traces(marker_line_width=0)
     fig2.update_layout(margin=dict(l=0, r=0, t=30, b=0), plot_bgcolor="rgba(0,0,0,0)",
                        paper_bgcolor="rgba(0,0,0,0)", font=PLOT_FONT, xaxis_title="", yaxis_title="Servers",
-                       yaxis=dict(gridcolor="#EEE"), legend_title_text="", bargap=.4,
+                       yaxis=dict(gridcolor="rgba(46,50,112,.08)"), legend_title_text="", bargap=.4,
                        title=dict(text="Servers by country and environment", font=dict(size=15)))
     st.plotly_chart(fig2, width="stretch", config={"displayModeBar": False})
 
@@ -481,6 +581,7 @@ html(f"""
 # =============================================================================
 html(f"""
 <div class="contact" id="contact">
+<p class="small">Game, set, match.</p>
 <h2>Let's build something with your data.</h2>
 <p>I'm looking for Data Scientist, ML and Data Engineering roles. Send me an email or find me on LinkedIn.</p>
 <a class="btn btn-primary" href="{LINKS['email']}">Email me</a>

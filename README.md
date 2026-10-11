@@ -6,6 +6,7 @@ A single-page portfolio built with Streamlit, custom HTML and CSS.
 - **Hero** with headline and key numbers.
 - **What I bring**: six capabilities, each linked to the project that proves it.
 - **Work**: featured projects (Restaurant NLP live app, Pump It Up, hostname pipeline, glucose study).
+- **Dashboards**: Easy Loans Tableau dashboards, embedded from Tableau Public.
 - **Live demo**: a working data pipeline that generates, parses and validates a server inventory, with a CSV download.
 - **Why me** and a timeline of my path.
 - **Contact**.
@@ -24,3 +25,9 @@ streamlit run app.py
 ## Edit the content
 Links and capability tiles are at the top of `app.py` (`LINKS`, `CAPABILITIES`).
 Section text is in the HTML blocks further down; styles are in the `<style>` block.
+
+## Embed the Tableau dashboards
+1. Open the `.twbx` in Tableau Public (free desktop app) and choose **File > Save to Tableau Public As...**
+2. On Tableau Public, open each dashboard, click **Share** and copy the link
+   (it looks like `https://public.tableau.com/views/<Workbook>/<Dashboard>`).
+3. Paste the links into `TABLEAU_DASHBOARDS` (and your profile into `TABLEAU_PROFILE`) at the top of `app.py`.
