@@ -1,12 +1,14 @@
-# Data Science & Data Engineering Portfolio
+# María Carolina · Data Science & Data Engineering Portfolio
 
-Interactive portfolio of Maria Carolina Gonzalez Bernal, built with Streamlit.
+A single-page portfolio built with Streamlit, custom HTML and CSS.
 
-**Tabs**
-- **Projects**: NLP/MLOps, machine learning, data engineering and statistics projects, with key metrics and links.
-- **Live demo: data pipeline**: generates a synthetic server inventory, parses each hostname into fields, runs data quality checks and lets you download the CSV.
-- **Skills**: skills mapped to the projects where they were used, plus the full toolkit.
-- **Background**: education, experience and languages.
+**Sections**
+- **Hero** with headline and key numbers.
+- **What I bring**: six capabilities, each linked to the project that proves it.
+- **Work**: featured projects (Restaurant NLP live app, Pump It Up, hostname pipeline, glucose study).
+- **Live demo**: a working data pipeline that generates, parses and validates a server inventory, with a CSV download.
+- **Why me** and a timeline of my path.
+- **Contact**.
 
 ## Run locally
 ```bash
@@ -15,9 +17,10 @@ streamlit run app.py
 ```
 
 ## Deploy on Streamlit Community Cloud
-1. Push this folder (`app.py`, `requirements.txt`, `.streamlit/config.toml`) to a public GitHub repository.
+1. Push `app.py`, `requirements.txt` and the `.streamlit/` folder to a public GitHub repository.
 2. Go to share.streamlit.io, sign in with GitHub and choose **Create app**.
-3. Select the repository and branch, set the main file to `app.py`, and deploy.
+3. Pick the repository, set the main file to `app.py` and deploy.
 
-## Update the content
-All text lives in the `PROFILE`, `PROJECTS`, `SKILLS`, `EVIDENCE`, `EDUCATION` and `EXPERIENCE` blocks at the top of `app.py`.
+## Edit the content
+Links and capability tiles are at the top of `app.py` (`LINKS`, `CAPABILITIES`).
+Section text is in the HTML blocks further down; styles are in the `<style>` block.
