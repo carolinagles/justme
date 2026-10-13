@@ -2,7 +2,7 @@
 María Carolina · Data Science & Data Engineering portfolio (Streamlit).
 Run locally:  streamlit run app.py
 
-Mood: an editorial newspaper page with liquid-glass panels.
+Design: Swiss typography and grid with liquid-glass panels.
 Palette: warm paper background with five accent colours
 (luminous blue, energy orange, pop pink, meadowland green, clay) and warm neutrals.
 
@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="María Carolina · Data Scientist", page_icon="📰", layout="wide")
+st.set_page_config(page_title="María Carolina · Data Scientist", page_icon="◦", layout="wide")
 
 
 def html(block: str) -> None:
@@ -100,206 +100,48 @@ TODAY = date.today().strftime("%A, %d %B %Y")
 # =============================================================================
 html(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Inter:wght@400;500;600&display=swap');
-:root {{
-  --paper:{PAPER}; --paper-deep:{PAPER_DEEP}; --ink:{INK}; --muted:{MUTED};
-  --blue:{BLUE}; --orange:{ORANGE}; --pink:{PINK}; --green:{GREEN}; --clay:{CLAY};
-  --sand:{SAND}; --taupe:{TAUPE}; --stone:{STONE}; --linen:{LINEN};
-  --display: "Bodoni Moda", "Didot", "Bodoni 72", "Times New Roman", serif;
-  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
-  --glass: rgba(255,255,255,.42);
-  --glass-edge: rgba(255,255,255,.78);
-  --glass-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 0 0 1px rgba(185,126,84,.06), 0 18px 40px rgba(90,62,40,.10);
-}}
-html, body, .stApp, .stApp :is(h1,h2,h3,h4,p,span,div,a,b,li,label,button,input,small,td,th):not([data-testid="stIconMaterial"]):not(.material-symbols-rounded) {{
-  font-family: var(--sans) !important; -webkit-font-smoothing: antialiased; }}
-.stApp.stApp.stApp :is(h1,h2,h3,h4,b,em) :is(span,em) {{ font-family: inherit !important; }}
-[data-testid="stHeaderActionElements"] {{ display: none !important; }}
-header[data-testid="stHeader"], #MainMenu, footer, [data-testid="stToolbar"], [data-testid="stDecoration"] {{ display: none !important; }}
-
-/* Paper background with very soft light so the glass has something to refract */
-.stApp {{
-  color: var(--ink);
-  background:
-    radial-gradient(38vw 30vw at 88% 12%, rgba(86,111,151,.10), transparent 70%),
-    radial-gradient(34vw 28vw at 6% 46%, rgba(185,126,84,.10), transparent 70%),
-    radial-gradient(36vw 30vw at 92% 78%, rgba(214,132,168,.08), transparent 70%),
-    radial-gradient(30vw 26vw at 18% 92%, rgba(136,136,108,.09), transparent 70%),
-    linear-gradient(180deg, {PAPER_DEEP} 0%, {PAPER} 30%, {PAPER} 100%);
-  background-attachment: fixed;
-}}
-.block-container {{ max-width: 1160px; padding: 0 2rem 2rem 2rem; }}
-a {{ color: inherit; }}
-::selection {{ background: var(--blue); color: #fff; }}
-a:focus-visible, button:focus-visible {{ outline: 2px solid var(--blue); outline-offset: 3px; }}
-
-/* Typography helpers */
-.kicker {{ font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink); font-weight: 500; }}
-.kicker.muted {{ color: var(--muted); }}
-.stApp.stApp.stApp .byline, .stApp.stApp.stApp .byline * {{ font-family: var(--serif) !important; font-style: italic; color: var(--ink); }}
-.stApp.stApp.stApp .serif, .stApp.stApp.stApp .serif * {{ font-family: var(--serif) !important; }}
-
-/* Liquid glass */
-.glass, .st-key-demo, .st-key-bi {{
-  background: var(--glass);
-  backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%);
-  border: 1px solid var(--glass-edge); box-shadow: var(--glass-shadow); border-radius: 18px; position: relative;
-}}
-.glass::before {{
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: linear-gradient(140deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 72%, rgba(255,255,255,.22) 100%);
-}}
-.glass > * {{ position: relative; }}
-
-/* Masthead */
-.masthead {{ padding: 2.2rem 0 0 0; }}
-.mast-top {{ display: flex; justify-content: space-between; align-items: center; padding-bottom: .7rem; border-bottom: 1px solid var(--ink); }}
-.mast-top .brand {{ font-size: .8rem; letter-spacing: .38em; text-transform: uppercase; font-weight: 500; }}
-.stApp.stApp.stApp .masthead h1 {{ font-family: var(--display) !important; font-weight: 400; font-size: clamp(3.4rem, 10.5vw, 8.6rem);
-  line-height: .92; letter-spacing: -0.01em; text-transform: uppercase; margin: 1.6rem 0 .4rem -0.02em; padding: 0 !important; color: var(--ink); }}
-.masthead .tagline {{ font-size: .86rem; letter-spacing: .26em; text-transform: uppercase; margin: .8rem 0 0 0; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(38,38,38,.35); max-width: 640px; }}
-.swatches {{ display: flex; gap: 6px; margin-top: 1.1rem; }}
-.swatches i {{ width: 26px; height: 8px; display: block; border-radius: 2px; }}
-
-.mast-grid {{ display: grid; grid-template-columns: 1fr 250px; gap: 2rem; align-items: end; }}
-.inside {{ padding: 1.3rem 1.4rem 1rem 1.4rem; margin-bottom: .2rem; }}
-.inside .kicker {{ display: block; padding-bottom: .7rem; border-bottom: 1px solid rgba(38,38,38,.25); margin-bottom: .3rem; }}
-.stApp .inside a {{ display: flex; gap: .9rem; align-items: baseline; text-decoration: none; color: var(--ink) !important; padding: .55rem 0; border-bottom: 1px solid rgba(38,38,38,.1); font-size: .95rem; }}
-.stApp .inside a:last-child {{ border-bottom: none; }}
-.stApp .inside a:hover {{ color: var(--clay) !important; }}
-.stApp.stApp.stApp .inside em {{ font-family: var(--display) !important; font-style: italic; color: var(--clay); width: 1rem; }}
-/* Section bar like a newspaper menu */
-.sections {{ position: sticky; top: 0; z-index: 50; margin: 1.8rem 0 0 0; padding: .65rem 1.1rem; display: flex; gap: 1.6rem; flex-wrap: wrap; align-items: center; border-radius: 14px; }}
-.stApp .sections a {{ text-decoration: none; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink) !important; padding: .2rem 0; border-bottom: 1px solid transparent; }}
-.stApp .sections a:hover {{ border-bottom-color: var(--clay); }}
-.sections .date {{ margin-left: auto; font-size: .82rem; color: var(--muted); }}
-
-/* Front page */
-.front {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 2.2rem; margin-top: 2.2rem; align-items: start; }}
-.article {{ padding: 2.2rem 2.4rem 2rem 2.4rem; }}
-.article .byline {{ font-size: 1.05rem; line-height: 1.5; padding-bottom: 1.1rem; border-bottom: 1px solid rgba(38,38,38,.25); margin-bottom: 1.4rem; }}
-.stApp.stApp.stApp .article p.body {{ font-family: var(--serif) !important; font-size: 1.12rem; line-height: 1.62; color: var(--ink); margin: 0 0 1.1rem 0; }}
-.stApp.stApp.stApp .article p.body.first::first-letter {{ font-family: var(--display) !important; float: left; font-size: 4.3rem; line-height: .82; padding: .35rem .55rem 0 0; color: var(--clay); }}
-.pull {{ display: flex; gap: .9rem; align-items: flex-start; margin: 1.6rem 0 1.4rem 0; }}
-.stApp.stApp.stApp .pull .mark {{ font-family: var(--display) !important; font-size: 3.4rem; line-height: .7; color: var(--sand); }}
-.stApp.stApp.stApp .pull p {{ font-family: var(--serif) !important; font-style: italic; font-size: 1.45rem; line-height: 1.3; margin: 0; }}
-.btn {{ display: inline-block; padding: .75rem 1.2rem; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none !important;
-  border: 1px solid var(--ink); border-radius: 999px; margin: .3rem .5rem .3rem 0; transition: background .2s, color .2s; }}
-.btn-ink {{ background: var(--ink); color: var(--paper) !important; }}
-.btn-ink:hover {{ background: var(--blue); border-color: var(--blue); }}
-.btn-line {{ color: var(--ink) !important; background: rgba(255,255,255,.35); }}
-.btn-line:hover {{ background: var(--ink); color: var(--paper) !important; }}
-
-.figures .head {{ text-align: center; margin: .2rem 0 1.4rem 0; }}
-.figure {{ display: grid; grid-template-columns: 112px 1fr; gap: 1.4rem; align-items: center; margin-bottom: 1.1rem; }}
-.figure .sw {{ height: 104px; border-radius: 4px; display: flex; align-items: flex-end; padding: .55rem .7rem; }}
-.stApp.stApp.stApp .figure .sw b {{ font-family: var(--display) !important; color: #fff; font-size: 1.7rem; font-weight: 500; line-height: 1; }}
-.figure .txt {{ border-left: 1px solid rgba(38,38,38,.2); padding-left: 1.2rem; }}
-.figure .txt .kicker {{ display: block; margin-bottom: .45rem; }}
-.figure .txt p {{ margin: 0; font-size: .9rem; line-height: 1.5; color: var(--muted); }}
-
-/* Section headings */
-.sec {{ margin-top: 6rem; scroll-margin-top: 80px; }}
-.sec-head {{ display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; border-bottom: 1px solid var(--ink); padding-bottom: .9rem; margin-bottom: 2rem; }}
-.stApp.stApp.stApp .sec-head h2 {{ font-family: var(--display) !important; font-weight: 400; font-size: clamp(2.4rem, 5.2vw, 3.9rem);
-  line-height: .98; margin: .5rem 0 0 0; padding: 0 !important; text-transform: uppercase; }}
-.stApp.stApp.stApp .sec-head .dek {{ font-family: var(--serif) !important; font-style: italic; font-size: 1.05rem; color: var(--muted); max-width: 34ch; text-align: right; margin: 0; }}
-
-/* Capabilities: two-column index */
-.caps {{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.4rem; }}
-.cap {{ display: grid; grid-template-columns: 14px 1fr; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid rgba(38,38,38,.18); }}
-.cap .dot {{ width: 14px; height: 14px; border-radius: 3px; margin-top: .35rem; }}
-.stApp.stApp.stApp .cap h3 {{ font-family: var(--display) !important; font-weight: 500; font-size: 1.45rem; margin: 0 0 .35rem 0; padding: 0 !important; }}
-.stApp.stApp.stApp .cap p {{ font-family: var(--serif) !important; margin: 0 0 .5rem 0; font-size: 1.02rem; line-height: 1.5; }}
-.cap .tools {{ font-size: .82rem; color: var(--muted); line-height: 1.5; }}
-.cap .where {{ font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--clay); margin-top: .45rem; }}
-
-/* Lead story */
-.lead {{ padding: 2.4rem; }}
-.lead-grid {{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.4rem; }}
-.stApp.stApp.stApp .lead h3 {{ font-family: var(--display) !important; font-weight: 400; font-size: clamp(2.2rem, 4.4vw, 3.4rem); line-height: 1; margin: .6rem 0 1rem 0; padding: 0 !important; }}
-.stApp.stApp.stApp .lead p.body {{ font-family: var(--serif) !important; font-size: 1.08rem; line-height: 1.62; margin: 0 0 1rem 0; column-gap: 2rem; }}
-.review {{ background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.9); border-radius: 12px; padding: .9rem 1rem; margin-bottom: .7rem; display: grid; grid-template-columns: 1fr auto; gap: .8rem; }}
-.stApp.stApp.stApp .review p {{ font-family: var(--serif) !important; font-style: italic; margin: 0; font-size: 1rem; line-height: 1.45; }}
-.tag {{ font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; padding: .22rem .55rem; border-radius: 999px; color: #fff; height: fit-content; white-space: nowrap; }}
-.tag.neg {{ background: var(--orange); }}
-.tag.pos {{ background: var(--green); }}
-.tag.neu {{ background: var(--taupe); }}
-.words {{ font-size: .84rem; color: var(--muted); margin: .1rem 0 1rem .2rem; }}
-.words mark {{ background: rgba(234,97,29,.14); color: var(--ink); padding: 0 .3rem; border-radius: 4px; }}
-.facts {{ display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 2rem; border-top: 1px solid rgba(38,38,38,.25); }}
-.facts div {{ padding: 1rem 1rem 0 0; }}
-.stApp.stApp.stApp .facts b {{ display: block; font-family: var(--display) !important; font-size: 2.1rem; font-weight: 500; line-height: 1.05; }}
-.facts span {{ font-size: .82rem; color: var(--muted); line-height: 1.4; display: block; margin-top: .3rem; }}
-
-/* Article grid */
-.stories {{ display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.4rem; }}
-.story {{ padding: 1.8rem 1.9rem 1.6rem 1.9rem; border-top: 6px solid var(--accent) !important; }}
-.story .row {{ display: flex; justify-content: space-between; }}
-.stApp.stApp.stApp .story h3 {{ font-family: var(--display) !important; font-weight: 400; font-size: 1.95rem; line-height: 1.05; margin: 1rem 0 .7rem 0; padding: 0 !important; }}
-.stApp.stApp.stApp .story p {{ font-family: var(--serif) !important; font-size: 1.02rem; line-height: 1.55; color: var(--ink); margin: 0 0 1.1rem 0; }}
-.story .nums {{ display: flex; gap: 2rem; margin-bottom: 1.1rem; }}
-.stApp.stApp.stApp .story .nums b {{ display: block; font-family: var(--display) !important; font-size: 1.8rem; font-weight: 500; color: var(--accent); }}
-.story .nums span {{ font-size: .8rem; color: var(--muted); }}
-
-/* Dashboards */
-.dash-notes {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-bottom: 1.6rem; }}
-.dash-notes div {{ border-top: 3px solid var(--accent); padding-top: .8rem; }}
-.dash-notes b {{ display: block; font-weight: 600; margin-bottom: .3rem; }}
-.stApp.stApp.stApp .dash-notes span {{ font-family: var(--serif) !important; color: var(--muted); font-size: .98rem; line-height: 1.5; }}
-.st-key-bi {{ padding: 1.2rem; }}
-.st-key-bi iframe {{ border-radius: 12px; }}
-
-/* Live demo */
-.st-key-demo {{ padding: 1.8rem 1.8rem 1rem 1.8rem; }}
-.steps {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: .6rem 0 1.4rem 0; }}
-.steps div {{ background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.9); border-radius: 12px; padding: .9rem 1rem; border-left: 4px solid var(--accent); }}
-.steps .kicker {{ font-size: .66rem; }}
-.stApp.stApp.stApp .steps b {{ display: block; font-family: var(--display) !important; font-size: 2.2rem; font-weight: 500; line-height: 1.1; }}
-.steps small {{ color: var(--muted); }}
-.check {{ font-size: .95rem; padding: .45rem 0; border-bottom: 1px solid rgba(38,38,38,.12); display: flex; gap: .7rem; }}
-.check .ok {{ color: var(--green); font-weight: 600; }}
-.check .ko {{ color: var(--orange); font-weight: 600; }}
-.stButton button, .stDownloadButton button {{ border-radius: 999px !important; border: 1px solid var(--ink) !important; background: rgba(255,255,255,.4) !important; }}
-.stDownloadButton button:hover {{ background: var(--ink) !important; color: var(--paper) !important; }}
-[data-testid="stExpander"] details {{ border-radius: 12px !important; background: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.85) !important; }}
-div[data-baseweb="input"], div[data-baseweb="base-input"] {{ background: rgba(255,255,255,.55) !important; }}
-
-/* About */
-.about {{ display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.2rem; align-items: start; }}
-.notes {{ padding: 2rem 2.2rem; }}
-.note {{ padding: 1rem 0; border-bottom: 1px solid rgba(38,38,38,.15); }}
-.note:last-child {{ border-bottom: none; padding-bottom: 0; }}
-.note:first-child {{ padding-top: 0; }}
-.stApp.stApp.stApp .note h4 {{ font-family: var(--display) !important; font-weight: 500; font-size: 1.35rem; margin: 0 0 .35rem 0; padding: 0 !important; }}
-.stApp.stApp.stApp .note p {{ font-family: var(--serif) !important; color: var(--ink); font-size: 1.02rem; line-height: 1.55; margin: 0; }}
-.path {{ width: 100%; border-collapse: collapse; }}
-.path tr {{ border-bottom: 1px solid rgba(38,38,38,.18); }}
-.path td {{ padding: .9rem .8rem .9rem 0; vertical-align: top; font-size: .95rem; }}
-.path td.year {{ width: 26%; color: var(--clay); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; padding-top: 1.05rem; }}
-.path td.what b {{ display: block; font-weight: 600; }}
-.path td.what span {{ color: var(--muted); font-size: .9rem; }}
-
-/* Contact and footer */
-.contact {{ margin-top: 6rem; padding: 3rem 2.4rem; text-align: center; scroll-margin-top: 80px; }}
-.stApp.stApp.stApp .contact h2 {{ font-family: var(--display) !important; font-weight: 400; font-size: clamp(2.6rem, 6vw, 4.6rem); text-transform: uppercase; margin: .6rem 0 .8rem 0; padding: 0 !important; line-height: 1; }}
-.stApp.stApp.stApp .contact p {{ font-family: var(--serif) !important; font-style: italic; font-size: 1.15rem; color: var(--muted); margin: 0 0 1.6rem 0; }}
-.stApp .contact .mail {{ font-family: var(--display) !important; font-size: clamp(1.5rem, 3.2vw, 2.3rem); text-decoration: none; color: var(--ink) !important; border-bottom: 2px solid var(--clay); }}
-.foot {{ display: flex; justify-content: space-between; align-items: center; margin: 2.4rem 0 0 0; padding-top: .9rem; border-top: 1px solid var(--ink); font-size: .74rem; color: var(--muted); letter-spacing: .08em; }}
-
-@media (max-width: 860px) {{
-  .block-container {{ padding: 0 1rem 2rem 1rem; }}
-  .mast-grid, .front, .lead-grid, .caps, .stories, .about, .dash-notes, .steps {{ grid-template-columns: 1fr; }}
-  .facts {{ grid-template-columns: 1fr 1fr; }}
-  .sec-head {{ grid-template-columns: 1fr; }}
-  .stApp.stApp.stApp .sec-head .dek {{ text-align: left; }}
-  .sections {{ gap: .9rem; }} .sections .date {{ display: none; }}
-  .article, .lead {{ padding: 1.6rem 1.4rem; }}
-  .figure {{ grid-template-columns: 92px 1fr; }}
-  .foot {{ flex-direction: column; gap: .4rem; }}
-  .inside {{ display: none; }}
-}}
+:root {{ --paper:{PAPER}; --ink:{INK}; --muted:#59534E; --blue:{BLUE}; --orange:{ORANGE}; --pink:{PINK}; --green:{GREEN}; --clay:{CLAY}; --sand:{SAND}; --taupe:{TAUPE}; --sans:Helvetica Neue,Helvetica,Arial,sans-serif; }}
+html {{scroll-behavior:smooth;}}
+body,.stApp,.stApp :is(h1,h2,h3,h4,p,span,div,a,b,li,label,button,input,small,td,th) {{font-family:var(--sans); -webkit-font-smoothing:antialiased;}}
+.stApp {{color:var(--ink); background:radial-gradient(ellipse at 95% 8%,#566F9726,transparent 36%),radial-gradient(ellipse at 5% 40%,#D684A82B,transparent 34%),radial-gradient(ellipse at 90% 73%,#88886C28,transparent 35%),{PAPER}; background-attachment:fixed;}}
+header[data-testid="stHeader"],#MainMenu,footer,[data-testid="stToolbar"] {{display:none;}}
+.block-container {{max-width:1240px;padding:2rem 2.5rem 3rem;}}
+a {{color:inherit;}} ::selection {{background:var(--blue);color:white;}}
+a:focus-visible,button:focus-visible {{outline:3px solid var(--blue);outline-offset:5px;}}
+.kicker {{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;}} .muted {{color:var(--muted);}}
+.glass,.st-key-demo,.st-key-bi {{background:linear-gradient(135deg,#ffffff99,#ffffff40);border:1px solid #ffffffe0;border-radius:24px;box-shadow:inset 0 1px 1px white,inset 0 -1px 1px #ffffff80,0 12px 40px #2626260c;backdrop-filter:blur(26px) saturate(145%);-webkit-backdrop-filter:blur(26px) saturate(145%);}}
+.mast-top {{display:flex;justify-content:space-between;gap:1rem;padding-bottom:1rem;border-bottom:1px solid #26262630;}} .brand {{font-weight:600;font-size:.85rem;}}
+.mast-grid {{display:grid;grid-template-columns:1.7fr 1fr;gap:4rem;align-items:end;padding:4.5rem 0 3rem;}}
+.stApp .masthead h1 {{font-family:var(--sans);font-size:clamp(3.4rem,8vw,6.8rem);font-weight:600;letter-spacing:-.075em;line-height:.96;margin:0;padding:0;}}
+.tagline {{font-size:.85rem;margin-top:1.8rem;line-height:1.6;color:var(--muted);}}
+.hero-note {{font-size:1.2rem;line-height:1.6;max-width:32ch;}} .hero-note p {{margin-bottom:1.4rem;}}
+.swatches {{display:flex;gap:7px;margin-top:1.3rem;}} .swatches i {{width:28px;height:6px;border-radius:10px;}}
+.sections {{display:flex;gap:1.7rem;align-items:center;flex-wrap:wrap;padding:.85rem 1.3rem;margin-bottom:2rem;border-radius:999px;}}
+.sections a {{font-size:.82rem;text-decoration:none;padding:.4rem 0;}} .sections a:hover {{color:var(--blue);}}
+.btn {{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1.2rem;border:1px solid #26262635;border-radius:999px;text-decoration:none!important;font-size:.82rem;font-weight:500;margin:.25rem .3rem .25rem 0;transition:transform .2s,background .2s;}}
+.btn:hover {{transform:translateY(-2px);background:#ffffffb0;}} .btn-ink {{background:var(--ink);color:white!important;}} .btn-ink:hover {{background:var(--blue);}}
+.front {{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;}} .article {{padding:2rem;}} .article .body {{font-size:1rem;line-height:1.7;margin:0;max-width:60ch;}}
+.figures {{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;}} .figure {{padding:1.2rem;background:#ffffff55;border:1px solid #ffffffb0;border-radius:18px;}} .figure .sw {{background:none!important;}} .figure .sw b {{font-size:2rem;letter-spacing:-.06em;}} .figure .txt p {{display:none;}} .figure .txt .kicker {{font-size:.65rem;color:var(--muted);}} .figures .head {{display:none;}}
+.sec {{margin-top:5rem;scroll-margin-top:24px;}} .sec-head {{display:grid;grid-template-columns:1fr auto;align-items:end;gap:2rem;padding-bottom:1.2rem;border-bottom:1px solid #26262630;margin-bottom:1.7rem;}}
+.stApp .sec-head h2 {{font-size:clamp(2rem,4vw,3.4rem);font-weight:500;letter-spacing:-.055em;padding:0;margin:.5rem 0 0;line-height:1.1;}} .dek {{max-width:36ch;font-size:.9rem;line-height:1.5;color:var(--muted);margin:0;}}
+.caps {{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}} .cap {{display:grid;grid-template-columns:10px 1fr;gap:.8rem;border-top:1px solid #26262625;padding:1.2rem 0;}} .dot {{width:9px;height:9px;border-radius:50%;margin-top:.4rem;}}
+.stApp .cap h3 {{font-size:1.1rem;font-weight:600;letter-spacing:-.025em;margin:0 0 .6rem;padding:0;}} .cap p {{font-size:.9rem;line-height:1.6;}} .tools,.where {{font-size:.75rem;line-height:1.6;color:var(--muted);}} .where {{margin-top:.6rem;}}
+.lead {{padding:2.5rem;}} .lead-grid {{display:grid;grid-template-columns:1.25fr 1fr;gap:3rem;}}
+.stApp .lead h3 {{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:500;letter-spacing:-.05em;line-height:1.1;margin:1rem 0; padding:0;}}
+.body,.story p {{font-size:.95rem;line-height:1.65;}}
+.review {{background:#ffffff75;border:1px solid white;border-radius:16px;padding:1rem;margin:.6rem 0;display:flex;flex-direction:column;gap:.8rem;}} .review p {{font-size:.9rem;line-height:1.5;margin:0;}} .tag {{font-size:.65rem;font-weight:600;align-self:flex-start;padding:.3rem .6rem;border-radius:999px;}} .neg {{background:#EA611D25;color:#85300B;}} .pos {{background:#88886C30;color:#45452E;}} .neu {{background:#AF9A8730;color:#554437;}} .words {{font-size:.75rem;color:var(--muted);}} mark {{background:#EA611D20;padding:.15rem .3rem;border-radius:4px;}}
+.facts {{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;border-top:1px solid #26262620;margin-top:2rem;padding-top:1.5rem;}} .facts b {{display:block;font-size:1.5rem;letter-spacing:-.04em;}} .facts span {{display:block;font-size:.75rem;color:var(--muted);margin-top:.4rem;line-height:1.5;}}
+.stories {{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem;}} .story {{padding:2rem;border-top:3px solid var(--accent);}} .story h3 {{font-size:1.65rem;font-weight:500;letter-spacing:-.04em;line-height:1.2;margin:1rem 0;}} .nums {{display:flex;gap:2rem;margin-bottom:1rem;}} .nums b {{display:block;font-size:1.7rem;letter-spacing:-.04em;}} .nums span {{font-size:.75rem;color:var(--muted);}}
+.dash-notes {{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-bottom:1.5rem;}} .dash-notes div {{border-top:2px solid var(--accent);padding-top:.8rem;}} .dash-notes b {{display:block;font-size:.9rem;margin-bottom:.4rem;}} .dash-notes span {{font-size:.85rem;line-height:1.5;color:var(--muted);}}
+.st-key-bi,.st-key-demo {{padding:1.5rem;}} .steps {{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}} .steps div {{background:#ffffff70;border:1px solid white;border-radius:16px;padding:1rem;border-left:3px solid var(--accent);}} .steps b {{display:block;font-size:2rem;font-weight:500;letter-spacing:-.05em;}} .steps small {{color:var(--muted);}}
+.check {{font-size:.85rem;padding:.65rem 0;border-bottom:1px solid #26262615;display:flex;gap:.6rem;}} .ok {{color:#45452E;}} .ko {{color:#85300B;}}
+.stButton button,.stDownloadButton button,.stLinkButton a {{border-radius:999px!important;min-height:44px;}} [data-testid="stExpander"] details {{background:#ffffff55;border-radius:16px;border:1px solid white;}}
+.about {{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}} .notes {{padding:2rem;}} .note {{padding:1rem 0;border-bottom:1px solid #26262620;}} .note:first-child {{padding-top:0;}} .note:last-child {{border:0;padding-bottom:0;}} .note h4 {{font-size:1rem;font-weight:600;padding:0;margin-bottom:.5rem;}} .note p {{font-size:.9rem;line-height:1.65;margin:0;}}
+.path {{width:100%;border-collapse:collapse;}} .path tr {{border-bottom:1px solid #26262620;}} .path td {{padding:1rem .6rem;font-size:.85rem;vertical-align:top;}} .year {{white-space:nowrap;color:var(--muted);}} .what b,.what span {{display:block;line-height:1.5;}} .what span {{color:var(--muted);margin-top:.3rem;}}
+.contact {{padding:2.5rem;margin-top:5rem;}} .contact h2 {{font-size:2.5rem;font-weight:500;letter-spacing:-.05em;padding:0;margin:.8rem 0;}} .contact p {{font-size:.95rem;color:var(--muted);}} .mail {{font-size:clamp(1rem,3vw,1.7rem);text-decoration:none;border-bottom:1px solid #26262640;overflow-wrap:anywhere;}} .foot {{padding:2rem 0;font-size:.7rem;color:var(--muted);}}
+@media(max-width:800px) {{.block-container {{padding:1.2rem;}} .mast-grid,.front,.lead-grid,.about {{grid-template-columns:1fr;gap:1.5rem;}} .mast-grid {{padding:3rem 0 2rem;}} .hero-note {{max-width:48ch;font-size:1rem;}} .caps {{grid-template-columns:1fr 1fr;}} .sec-head {{grid-template-columns:1fr;gap:.8rem;}} .sections {{border-radius:20px;gap:.4rem 1.2rem;}} .facts {{grid-template-columns:1fr 1fr;}} .lead,.story,.article,.notes {{padding:1.5rem;}} }}
+@media(max-width:520px) {{.stories,.caps,.dash-notes {{grid-template-columns:1fr;}} .steps {{gap:.5rem;}} .steps div {{padding:.7rem;}} .steps .kicker {{font-size:.6rem;}} .mast-top .kicker {{font-size:.6rem;}} .sec {{margin-top:3.5rem;}} }}
+@media(prefers-reduced-motion:reduce) {{html {{scroll-behavior:auto;}} .btn {{transition:none;}} .btn:hover {{transform:none;}}}}
 </style>
 """)
 
@@ -308,34 +150,12 @@ div[data-baseweb="input"], div[data-baseweb="base-input"] {{ background: rgba(25
 # =============================================================================
 swatches = "".join(f"<i style='background:{c}'></i>" for c in (BLUE, ORANGE, PINK, GREEN, CLAY))
 html(f"""
-<header class="masthead" id="top">
-<div class="mast-top"><span class="brand">Portfolio</span><span class="kicker muted">Hermosillo, Mexico</span></div>
-<div class="mast-grid">
-<div>
-<h1>María<br>Carolina</h1>
-<p class="tagline">Data science · Machine learning · Data engineering</p>
-<div class="swatches">{swatches}</div>
-</div>
-<aside class="inside glass">
-<span class="kicker">In this edition</span>
-<a href="#capabilities"><em>A</em>Capabilities</a>
-<a href="#work"><em>B</em>Selected work</a>
-<a href="#dashboards"><em>C</em>Dashboards</a>
-<a href="#demo"><em>D</em>Live demo</a>
-<a href="#about"><em>E</em>About</a>
-</aside>
-</div>
+<header class="masthead" id="front">
+<div class="mast-top"><span class="brand">MC / Portfolio</span><span class="kicker muted">Hermosillo, Mexico · Open to relocation</span></div>
+<div class="mast-grid"><div><h1>María<br>Carolina.</h1><p class="tagline">Data science / Machine learning / Data engineering</p><div class="swatches">{swatches}</div></div>
+<div class="hero-note"><p>I explore data and build tools that make the findings easier to use.</p><a class="btn btn-ink" href="#work">Explore projects ↗</a><a class="btn btn-line" href="#contact">Contact</a></div></div>
 </header>
-<nav class="sections glass">
-<a href="#front">Front page</a>
-<a href="#capabilities">Capabilities</a>
-<a href="#work">Work</a>
-<a href="#dashboards">Dashboards</a>
-<a href="#demo">Demo</a>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
-<span class="date">{TODAY}</span>
-</nav>
+<nav class="sections glass" aria-label="Portfolio sections"><a href="#work">01 / Work</a><a href="#capabilities">02 / Skills</a><a href="#dashboards">03 / Dashboards</a><a href="#demo">04 / Demo</a><a href="#about">05 / About</a></nav>
 """)
 
 # =============================================================================
@@ -344,40 +164,12 @@ html(f"""
 figs = "".join(
     f"<div class='figure'><div class='sw' style='background:{c}'><b>{num}</b></div>"
     f"<div class='txt'><span class='kicker'>{name}</span><p>{text}</p></div></div>"
-    for c, num, name, text in FIGURES
+    for c, num, name, text in FIGURES[:4]
 )
 html(f"""
-<section class="front" id="front">
-<article class="article glass">
-<div class="byline">By María Carolina González Bernal<br>{TODAY}</div>
-<p class="body first">I work with data from the first messy file to the finished tool: cleaning it, testing what it says and building models and apps that other people can use.</p>
-<p class="body">I recently completed an M.Sc. in Data Science, Big Data &amp; Business Analytics at Complutense University of Madrid. Before that I studied anthropology, which taught me to listen and to frame a question carefully before looking for an answer.</p>
-<p class="body">The projects on this page cover natural language processing, machine learning, data pipelines, statistics and dashboards. Each one links to the code, a live app or a report.</p>
-<div class="pull"><span class="mark">“</span><p>Clean inputs, honest validation and results people can read.</p></div>
-<a class="btn btn-ink" href="#work">Read the work</a>
-<a class="btn btn-line" href="#demo">Try the demo</a>
-</article>
-<aside class="figures">
-<div class="head"><span class="kicker">Key figures</span></div>
-{figs}
-</aside>
-</section>
-""")
-
-# =============================================================================
-# CAPABILITIES
-# =============================================================================
-caps = "".join(
-    f"<div class='cap'><span class='dot' style='background:{c}'></span><div>"
-    f"<h3>{name}</h3><p>{what}</p><div class='tools'>{tools}</div><div class='where'>{where}</div></div></div>"
-    for name, c, what, tools, where in CAPABILITIES
-)
-html(f"""
-<section class="sec" id="capabilities">
-<div class="sec-head"><div><span class="kicker muted">Section A</span><h2>Capabilities</h2></div>
-<p class="dek">The areas I have worked in, each linked to a project.</p></div>
-<div class="caps">{caps}</div>
-</section>
+<section class="front" aria-label="Introduction and project results">
+<article class="article glass"><span class="kicker muted">A little context</span><p class="body" style="margin-top:1rem">My background is in anthropology and data science. My projects bring together data preparation, analysis and small applications, with a growing focus on data engineering.</p></article>
+<aside class="figures" aria-label="Selected project results">{figs}</aside></section>
 """)
 
 # =============================================================================
@@ -385,13 +177,13 @@ html(f"""
 # =============================================================================
 html(f"""
 <section class="sec" id="work">
-<div class="sec-head"><div><span class="kicker muted">Section B</span><h2>Selected work</h2></div>
-<p class="dek">Live apps, code and reports, with results measured on data the models had not seen.</p></div>
+<div class="sec-head"><div><span class="kicker muted">01 / Work</span><h2>Selected work</h2></div>
+<p class="dek">A selection of applications, notebooks and analyses.</p></div>
 <article class="lead glass">
 <div class="lead-grid">
 <div>
-<span class="kicker" style="color:var(--blue)">Lead story · NLP and deployment</span>
-<h3>What 1.16 million diners say about Madrid's restaurants</h3>
+<span class="kicker" style="color:var(--blue)">Featured project · NLP / Deployment</span>
+<h3>Madrid Restaurant Intelligence</h3>
 <p class="body">A reputation tool for 10,056 restaurants. It summarises each restaurant, compares it with similar places, flags reputations that declined and classifies any review in Spanish or English, showing how much each word weighed in the decision.</p>
 <p class="body">The data were split by restaurant, so the final test used places the model had never seen. The model is served through a FastAPI service with tests and tracked in MLflow.</p>
 <a class="btn btn-ink" href="{LINKS['restaurants']}" target="_blank">Open the app</a>
@@ -414,14 +206,14 @@ html(f"""
 <div class="stories">
 <article class="story glass" style="--accent:{ORANGE}">
 <div class="row"><span class="kicker muted">Machine learning · competition</span></div>
-<h3>Which water pumps will fail next?</h3>
+<h3>Water pump classification</h3>
 <p>60,000 water points in Tanzania with three possible outcomes. Feature engineering, target encoding fitted on training data only, and gradient boosting tuned with Optuna.</p>
 <div class="nums"><div><b>0.8132</b><span>leaderboard</span></div><div><b>0.817</b><span>5-fold CV</span></div></div>
 <a class="btn btn-line" href="{LINKS['pumps']}" target="_blank">Code</a>
 </article>
 <article class="story glass" style="--accent:{PINK}">
 <div class="row"><span class="kicker muted">Python app · live</span></div>
-<h3>Guess the Number, rebuilt as an app</h3>
+<h3>Guess the Number</h3>
 <p>A console game turned into a Streamlit app with game modes, difficulty levels, scoring, saved results and a records screen with a leaderboard and charts.</p>
 <div class="nums"><div><b>3</b><span>difficulty levels</span></div><div><b>6</b><span>modules</span></div></div>
 <a class="btn btn-ink" href="{LINKS['guess']}" target="_blank">Play</a>
@@ -429,7 +221,7 @@ html(f"""
 </article>
 <article class="story glass" style="--accent:{GREEN}">
 <div class="row"><span class="kicker muted">Data engineering</span></div>
-<h3>A server inventory, generated and checked</h3>
+<h3>Hostname data pipeline</h3>
 <p>Hostnames created from a naming convention, parsed into fields and validated. An improved version runs in the demo section below.</p>
 <div class="nums"><div><b>1,500</b><span>records</span></div><div><b>5</b><span>quality checks</span></div></div>
 <a class="btn btn-ink" href="#demo">Try it</a>
@@ -447,11 +239,27 @@ html(f"""
 """)
 
 # =============================================================================
+# CAPABILITIES
+# =============================================================================
+caps = "".join(
+    f"<div class='cap'><span class='dot' style='background:{c}'></span><div>"
+    f"<h3>{name}</h3><p>{what}</p><div class='tools'>{tools}</div><div class='where'>{where}</div></div></div>"
+    for name, c, what, tools, where in CAPABILITIES
+)
+html(f"""
+<section class="sec" id="capabilities">
+<div class="sec-head"><div><span class="kicker muted">02 / Skills</span><h2>Capabilities</h2></div>
+<p class="dek">Tools and methods used across my projects.</p></div>
+<div class="caps">{caps}</div>
+</section>
+""")
+
+# =============================================================================
 # DASHBOARDS (Tableau)
 # =============================================================================
 html(f"""
 <section class="sec" id="dashboards">
-<div class="sec-head"><div><span class="kicker muted">Section C</span><h2>Dashboards</h2></div>
+<div class="sec-head"><div><span class="kicker muted">03 / Dashboards</span><h2>Dashboards</h2></div>
 <p class="dek">Easy Loans: a year of lending across Europe, in Tableau.</p></div>
 <div class="dash-notes">
 <div style="--accent:{BLUE}"><b>Loan operations</b><span>KPIs, deviation from the average, running total and date and country filters.</span></div>
@@ -545,7 +353,7 @@ PLOT_FONT = dict(family="Inter, Helvetica Neue, Arial, sans-serif", color=INK, s
 
 html("""
 <section class="sec" id="demo">
-<div class="sec-head"><div><span class="kicker muted">Section D</span><h2>Live demo</h2></div>
+<div class="sec-head"><div><span class="kicker muted">04 / Demo</span><h2>Live demo</h2></div>
 <p class="dek">A small data pipeline: generate a server inventory, parse it and check its quality.</p></div>
 </section>
 """)
@@ -618,13 +426,13 @@ with st.container(key="demo"):
 # =============================================================================
 html(f"""
 <section class="sec" id="about">
-<div class="sec-head"><div><span class="kicker muted">Section E</span><h2>About</h2></div>
+<div class="sec-head"><div><span class="kicker muted">05 / About</span><h2>About</h2></div>
 <p class="dek">How I like to work, and the path that brought me here.</p></div>
 <div class="about">
 <div class="notes glass">
 <div class="note"><h4>Questions first</h4><p>Anthropology taught me to interview, observe and define the problem before choosing a method.</p></div>
-<div class="note"><h4>Careful validation</h4><p>Leakage checks, untouched test sets and data quality tests, so results hold up outside the notebook.</p></div>
-<div class="note"><h4>Languages</h4><p>Spanish (native), English (C1) and German (B1+, still learning). Open to relocation.</p></div>
+<div class="note"><h4>Careful validation</h4><p>I use separate test data and quality checks to understand what a model can and cannot do.</p></div>
+<div class="note"><h4>Languages</h4><p>Spanish (native), English (C1) and German (B1+, learning).</p></div>
 </div>
 <table class="path">
 <tr><td class="year">2025–2026</td><td class="what"><b>M.Sc. Data Science, Big Data &amp; Business Analytics</b><span>Complutense University of Madrid</span></td></tr>
@@ -644,9 +452,9 @@ html(f"""
 <section class="contact glass" id="contact">
 <span class="kicker muted">Contact</span>
 <h2>Get in touch</h2>
-<p>For Data Scientist, ML and Data Engineering roles, I would be glad to hear from you.</p>
+<p>Interested in opportunities in data science and data engineering.</p>
 <a class="mail" href="{LINKS['email']}">Carolinagles@gmail.com</a>
-<div class="swatches" style="justify-content:center;margin-top:2rem">{swatches}</div>
+
 </section>
-<div class="foot"><span>María Carolina González Bernal · Portfolio</span><span>Built with Python, Streamlit and Plotly</span></div>
+<div class="foot">María Carolina González Bernal</div>
 """)
