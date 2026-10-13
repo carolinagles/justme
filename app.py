@@ -2,14 +2,12 @@
 María Carolina · Data Science & Data Engineering portfolio (Streamlit).
 Run locally:  streamlit run app.py
 
-Design: Swiss typography and grid with liquid-glass panels.
-Palette: warm paper background with five accent colours
-(luminous blue, energy orange, pop pink, meadowland green, clay) and warm neutrals.
+Design: Swiss / International Typographic Style (strict grid, large grotesk type,
+hairline rules) with liquid-glass panels and a warm palette:
+luminous blue, energy orange, pop pink, meadowland green and clay on paper.
 
 Content lives in the CONTENT section. Styling lives in STYLE.
 """
-
-from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -18,7 +16,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="María Carolina · Data Scientist", page_icon="◦", layout="wide")
+st.set_page_config(page_title="María Carolina · Data Scientist", page_icon="●", layout="wide")
 
 
 def html(block: str) -> None:
@@ -28,18 +26,24 @@ def html(block: str) -> None:
 
 
 # =============================================================================
+# PALETTE
+# =============================================================================
+PAPER = "#F1ECE8"
+INK = "#262626"
+MUTED = "#6B625A"
+BLUE = "#566F97"     # luminous blue
+ORANGE = "#EA611D"   # energy orange
+PINK = "#D684A8"     # pop pink
+GREEN = "#88886C"    # meadowland green
+CLAY = "#B97E54"     # clay
+SAND = "#CFB79F"
+TAUPE = "#AF9A87"
+STONE = "#BEB9B6"
+
+# =============================================================================
 # CONTENT
 # =============================================================================
-LINKS = {
-    "email": "mailto:Carolinagles@gmail.com",
-    "restaurants": "https://madrid-restaurant-intelligence.streamlit.app/",
-    "restaurants_repo": "https://github.com/carolinagles/madrid-restaurant-intelligence",
-    "pumps": "https://github.com/carolinagles/PumpItUp/blob/main/PumpItUp.ipynb",
-    "hostnames": "https://app.notion.com/p/Hostnames-Generator-2b9fea9d8900807e9deadffe3bdb83ae",
-    "glucose": "https://www.notion.so/Glucose-Levels-307fea9d89008006b054fb9422e09232",
-    "guess": "https://guessthenumberrrr.streamlit.app/",
-    "guess_repo": "https://github.com/carolinagles/guessthenumberrrr",
-}
+EMAIL = "Carolinagles@gmail.com"
 
 TABLEAU_DASHBOARDS = {
     "Loan operations": "https://public.tableau.com/views/EasyLoans_17918449786600/LOANOPERATIONS",
@@ -47,129 +51,339 @@ TABLEAU_DASHBOARDS = {
 }
 TABLEAU_PROFILE = "https://public.tableau.com/app/profile/maria.carolina.gonzalez.bernal"
 
-# Palette (sampled from the reference)
-PAPER = "#F1ECE8"
-PAPER_DEEP = "#EEE5DE"
-INK = "#262626"
-MUTED = "#6B625A"
-BLUE = "#566F97"
-ORANGE = "#EA611D"
-PINK = "#D684A8"
-GREEN = "#88886C"
-CLAY = "#B97E54"
-SAND = "#CFB79F"
-TAUPE = "#AF9A87"
-STONE = "#BEB9B6"
-LINEN = "#EBDFD1"
-
-# Key figures: colour, number, name, explanation
 FIGURES = [
-    (BLUE, "1.16M", "Reviews modelled", "Spanish and English restaurant reviews from Madrid, read by one classifier."),
-    (ORANGE, "0.808", "Macro F1", "Measured once on 996 restaurants the model never saw during development."),
-    (PINK, "0.8132", "Leaderboard score", "DrivenData “Pump It Up”, predicting which water pumps fail."),
-    (GREEN, "55", "Peer groups", "Cuisine and price groups covering 96.7% of comparable restaurants."),
-    (CLAY, "4.0×", "Alert lift", "How much more often a decline persisted after a Critical alert, in a backtest."),
+    (BLUE, "0.808", "Macro F1 on 996 restaurants the model never saw"),
+    (ORANGE, "0.879", "Recall on negative reviews"),
+    (PINK, "0.8132", "DrivenData “Pump It Up” leaderboard"),
+    (GREEN, "55", "Peer groups covering 96.7% of comparable restaurants"),
+    (CLAY, "4.0×", "Lift of the Critical alert in a historical backtest"),
 ]
 
-# Area, colour, what it involves, tools, where it shows up
+# area, colour, what it involves, tools, where it shows up
 CAPABILITIES = [
     ("Machine learning", BLUE,
      "Models evaluated on data they have not seen, split by group to avoid leakage.",
-     "Scikit-learn · LightGBM · CatBoost · XGBoost · Optuna", "Restaurant intelligence, Pump It Up"),
+     "Scikit-learn, LightGBM, CatBoost, XGBoost, Optuna", "Restaurant intelligence · Pump It Up"),
     ("Natural language", ORANGE,
      "Spanish and English text classification, with each prediction explained word by word.",
-     "TF-IDF · LinearSVC · Transformers · spaCy · NLTK", "Restaurant intelligence"),
+     "TF-IDF, LinearSVC, Transformers, spaCy, NLTK", "Restaurant intelligence"),
     ("Data engineering", PINK,
-     "Data that is generated, parsed, validated and exported with explicit checks.",
-     "Pandas · NumPy · Pandera · Parquet · SQL", "Hostname pipeline, Restaurant intelligence"),
+     "Data generated, parsed, validated and exported with explicit checks.",
+     "Pandas, NumPy, Pandera, Parquet, SQL", "Hostname pipeline · Restaurant intelligence"),
     ("Deployment", GREEN,
      "Models served behind a tested API and wrapped in small apps.",
-     "FastAPI · MLflow · pytest · Streamlit", "Restaurant intelligence, Guess the Number"),
+     "FastAPI, MLflow, pytest, Streamlit", "Restaurant intelligence · Guess the Number"),
     ("Statistics and BI", CLAY,
-     "Choosing the right test, then presenting results in dashboards that are quick to read.",
-     "Hypothesis testing · ANOVA · Regression · Tableau · Plotly", "Glucose study, Easy Loans"),
+     "Choosing the right test, then showing results in dashboards that are quick to read.",
+     "Hypothesis testing, ANOVA, regression, Tableau, Plotly", "Glucose study · Easy Loans"),
     ("Big data and cloud", TAUPE,
      "Distributed and cloud tools studied in my M.Sc. at Complutense University of Madrid.",
-     "PySpark · Spark SQL · MLlib · Google Cloud · MongoDB · Snowflake", "M.Sc. coursework"),
+     "PySpark, Spark SQL, MLlib, Google Cloud, MongoDB, Snowflake", "M.Sc. coursework"),
 ]
 
-TODAY = date.today().strftime("%A, %d %B %Y")
+# Smaller projects shown as cards. "areas" drives the filter.
+PROJECTS = [
+    {"title": "Which water pumps will fail next?", "color": ORANGE,
+     "kicker": "Machine learning · Competition", "areas": ["Machine learning"],
+     "text": "60,000 water points in Tanzania with three possible outcomes. Feature engineering, "
+             "target encoding fitted on training data only, and gradient boosting tuned with Optuna.",
+     "nums": [("0.8132", "leaderboard"), ("0.817", "5-fold CV")],
+     "links": [("Code", "https://github.com/carolinagles/PumpItUp/blob/main/PumpItUp.ipynb", False)]},
+    {"title": "Guess the Number, rebuilt as an app", "color": PINK,
+     "kicker": "Python app · Live", "areas": ["Apps"],
+     "text": "A console game turned into a Streamlit app with game modes, difficulty levels, scoring, "
+             "saved results and a records screen with a leaderboard and charts.",
+     "nums": [("3", "difficulty levels"), ("6", "modules")],
+     "links": [("Play", "https://guessthenumberrrr.streamlit.app/", True),
+               ("Code", "https://github.com/carolinagles/guessthenumberrrr", False)]},
+    {"title": "A server inventory, generated and checked", "color": GREEN,
+     "kicker": "Data engineering", "areas": ["Data engineering"],
+     "text": "Hostnames created from a naming convention, parsed into fields and validated. "
+             "An improved version runs in the live demo below.",
+     "nums": [("1,500", "records"), ("5", "quality checks")],
+     "links": [("Try it", "#demo", True),
+               ("Report", "https://app.notion.com/p/Hostnames-Generator-2b9fea9d8900807e9deadffe3bdb83ae", False)]},
+    {"title": "Glucose tolerance in young and adult patients", "color": CLAY,
+     "kicker": "Statistics · Health data", "areas": ["Statistics and BI"],
+     "text": "Two groups compared with normality checks, t-tests and ANOVA, plus a regression "
+             "that predicts glucose 60 minutes after intake.",
+     "nums": [("0.634", "R²"), ("4.61", "RMSE, mg/dL")],
+     "links": [("Report", "https://www.notion.so/Glucose-Levels-307fea9d89008006b054fb9422e09232", False)]},
+]
+FEATURED_AREAS = ["Machine learning", "Natural language", "Apps"]
+RESTAURANT_APP = "https://madrid-restaurant-intelligence.streamlit.app/"
+RESTAURANT_REPO = "https://github.com/carolinagles/madrid-restaurant-intelligence"
 
 # =============================================================================
 # STYLE
 # =============================================================================
 html(f"""
 <style>
-:root {{ --paper:{PAPER}; --ink:{INK}; --muted:#59534E; --blue:{BLUE}; --orange:{ORANGE}; --pink:{PINK}; --green:{GREEN}; --clay:{CLAY}; --sand:{SAND}; --taupe:{TAUPE}; --sans:Helvetica Neue,Helvetica,Arial,sans-serif; }}
-html {{scroll-behavior:smooth;}}
-body,.stApp,.stApp :is(h1,h2,h3,h4,p,span,div,a,b,li,label,button,input,small,td,th) {{font-family:var(--sans); -webkit-font-smoothing:antialiased;}}
-.stApp {{color:var(--ink); background:radial-gradient(ellipse at 95% 8%,#566F9726,transparent 36%),radial-gradient(ellipse at 5% 40%,#D684A82B,transparent 34%),radial-gradient(ellipse at 90% 73%,#88886C28,transparent 35%),{PAPER}; background-attachment:fixed;}}
-header[data-testid="stHeader"],#MainMenu,footer,[data-testid="stToolbar"] {{display:none;}}
-.block-container {{max-width:1240px;padding:2rem 2.5rem 3rem;}}
-a {{color:inherit;}} ::selection {{background:var(--blue);color:white;}}
-a:focus-visible,button:focus-visible {{outline:3px solid var(--blue);outline-offset:5px;}}
-.kicker {{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;}} .muted {{color:var(--muted);}}
-.glass,.st-key-demo,.st-key-bi {{background:linear-gradient(135deg,#ffffff99,#ffffff40);border:1px solid #ffffffe0;border-radius:24px;box-shadow:inset 0 1px 1px white,inset 0 -1px 1px #ffffff80,0 12px 40px #2626260c;backdrop-filter:blur(26px) saturate(145%);-webkit-backdrop-filter:blur(26px) saturate(145%);}}
-.mast-top {{display:flex;justify-content:space-between;gap:1rem;padding-bottom:1rem;border-bottom:1px solid #26262630;}} .brand {{font-weight:600;font-size:.85rem;}}
-.mast-grid {{display:grid;grid-template-columns:1.7fr 1fr;gap:4rem;align-items:end;padding:4.5rem 0 3rem;}}
-.stApp .masthead h1 {{font-family:var(--sans);font-size:clamp(3.4rem,8vw,6.8rem);font-weight:600;letter-spacing:-.075em;line-height:.96;margin:0;padding:0;}}
-.tagline {{font-size:.85rem;margin-top:1.8rem;line-height:1.6;color:var(--muted);}}
-.hero-note {{font-size:1.2rem;line-height:1.6;max-width:32ch;}} .hero-note p {{margin-bottom:1.4rem;}}
-.swatches {{display:flex;gap:7px;margin-top:1.3rem;}} .swatches i {{width:28px;height:6px;border-radius:10px;}}
-.sections {{display:flex;gap:1.7rem;align-items:center;flex-wrap:wrap;padding:.85rem 1.3rem;margin-bottom:2rem;border-radius:999px;}}
-.sections a {{font-size:.82rem;text-decoration:none;padding:.4rem 0;}} .sections a:hover {{color:var(--blue);}}
-.btn {{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1.2rem;border:1px solid #26262635;border-radius:999px;text-decoration:none!important;font-size:.82rem;font-weight:500;margin:.25rem .3rem .25rem 0;transition:transform .2s,background .2s;}}
-.btn:hover {{transform:translateY(-2px);background:#ffffffb0;}} .btn-ink {{background:var(--ink);color:white!important;}} .btn-ink:hover {{background:var(--blue);}}
-.front {{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;}} .article {{padding:2rem;}} .article .body {{font-size:1rem;line-height:1.7;margin:0;max-width:60ch;}}
-.figures {{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;}} .figure {{padding:1.2rem;background:#ffffff55;border:1px solid #ffffffb0;border-radius:18px;}} .figure .sw {{background:none!important;}} .figure .sw b {{font-size:2rem;letter-spacing:-.06em;}} .figure .txt p {{display:none;}} .figure .txt .kicker {{font-size:.65rem;color:var(--muted);}} .figures .head {{display:none;}}
-.sec {{margin-top:5rem;scroll-margin-top:24px;}} .sec-head {{display:grid;grid-template-columns:1fr auto;align-items:end;gap:2rem;padding-bottom:1.2rem;border-bottom:1px solid #26262630;margin-bottom:1.7rem;}}
-.stApp .sec-head h2 {{font-size:clamp(2rem,4vw,3.4rem);font-weight:500;letter-spacing:-.055em;padding:0;margin:.5rem 0 0;line-height:1.1;}} .dek {{max-width:36ch;font-size:.9rem;line-height:1.5;color:var(--muted);margin:0;}}
-.caps {{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}} .cap {{display:grid;grid-template-columns:10px 1fr;gap:.8rem;border-top:1px solid #26262625;padding:1.2rem 0;}} .dot {{width:9px;height:9px;border-radius:50%;margin-top:.4rem;}}
-.stApp .cap h3 {{font-size:1.1rem;font-weight:600;letter-spacing:-.025em;margin:0 0 .6rem;padding:0;}} .cap p {{font-size:.9rem;line-height:1.6;}} .tools,.where {{font-size:.75rem;line-height:1.6;color:var(--muted);}} .where {{margin-top:.6rem;}}
-.lead {{padding:2.5rem;}} .lead-grid {{display:grid;grid-template-columns:1.25fr 1fr;gap:3rem;}}
-.stApp .lead h3 {{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:500;letter-spacing:-.05em;line-height:1.1;margin:1rem 0; padding:0;}}
-.body,.story p {{font-size:.95rem;line-height:1.65;}}
-.review {{background:#ffffff75;border:1px solid white;border-radius:16px;padding:1rem;margin:.6rem 0;display:flex;flex-direction:column;gap:.8rem;}} .review p {{font-size:.9rem;line-height:1.5;margin:0;}} .tag {{font-size:.65rem;font-weight:600;align-self:flex-start;padding:.3rem .6rem;border-radius:999px;}} .neg {{background:#EA611D25;color:#85300B;}} .pos {{background:#88886C30;color:#45452E;}} .neu {{background:#AF9A8730;color:#554437;}} .words {{font-size:.75rem;color:var(--muted);}} mark {{background:#EA611D20;padding:.15rem .3rem;border-radius:4px;}}
-.facts {{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;border-top:1px solid #26262620;margin-top:2rem;padding-top:1.5rem;}} .facts b {{display:block;font-size:1.5rem;letter-spacing:-.04em;}} .facts span {{display:block;font-size:.75rem;color:var(--muted);margin-top:.4rem;line-height:1.5;}}
-.stories {{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem;}} .story {{padding:2rem;border-top:3px solid var(--accent);}} .story h3 {{font-size:1.65rem;font-weight:500;letter-spacing:-.04em;line-height:1.2;margin:1rem 0;}} .nums {{display:flex;gap:2rem;margin-bottom:1rem;}} .nums b {{display:block;font-size:1.7rem;letter-spacing:-.04em;}} .nums span {{font-size:.75rem;color:var(--muted);}}
-.dash-notes {{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-bottom:1.5rem;}} .dash-notes div {{border-top:2px solid var(--accent);padding-top:.8rem;}} .dash-notes b {{display:block;font-size:.9rem;margin-bottom:.4rem;}} .dash-notes span {{font-size:.85rem;line-height:1.5;color:var(--muted);}}
-.st-key-bi,.st-key-demo {{padding:1.5rem;}} .steps {{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}} .steps div {{background:#ffffff70;border:1px solid white;border-radius:16px;padding:1rem;border-left:3px solid var(--accent);}} .steps b {{display:block;font-size:2rem;font-weight:500;letter-spacing:-.05em;}} .steps small {{color:var(--muted);}}
-.check {{font-size:.85rem;padding:.65rem 0;border-bottom:1px solid #26262615;display:flex;gap:.6rem;}} .ok {{color:#45452E;}} .ko {{color:#85300B;}}
-.stButton button,.stDownloadButton button,.stLinkButton a {{border-radius:999px!important;min-height:44px;}} [data-testid="stExpander"] details {{background:#ffffff55;border-radius:16px;border:1px solid white;}}
-.about {{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}} .notes {{padding:2rem;}} .note {{padding:1rem 0;border-bottom:1px solid #26262620;}} .note:first-child {{padding-top:0;}} .note:last-child {{border:0;padding-bottom:0;}} .note h4 {{font-size:1rem;font-weight:600;padding:0;margin-bottom:.5rem;}} .note p {{font-size:.9rem;line-height:1.65;margin:0;}}
-.path {{width:100%;border-collapse:collapse;}} .path tr {{border-bottom:1px solid #26262620;}} .path td {{padding:1rem .6rem;font-size:.85rem;vertical-align:top;}} .year {{white-space:nowrap;color:var(--muted);}} .what b,.what span {{display:block;line-height:1.5;}} .what span {{color:var(--muted);margin-top:.3rem;}}
-.contact {{padding:2.5rem;margin-top:5rem;}} .contact h2 {{font-size:2.5rem;font-weight:500;letter-spacing:-.05em;padding:0;margin:.8rem 0;}} .contact p {{font-size:.95rem;color:var(--muted);}} .mail {{font-size:clamp(1rem,3vw,1.7rem);text-decoration:none;border-bottom:1px solid #26262640;overflow-wrap:anywhere;}} .foot {{padding:2rem 0;font-size:.7rem;color:var(--muted);}}
-@media(max-width:800px) {{.block-container {{padding:1.2rem;}} .mast-grid,.front,.lead-grid,.about {{grid-template-columns:1fr;gap:1.5rem;}} .mast-grid {{padding:3rem 0 2rem;}} .hero-note {{max-width:48ch;font-size:1rem;}} .caps {{grid-template-columns:1fr 1fr;}} .sec-head {{grid-template-columns:1fr;gap:.8rem;}} .sections {{border-radius:20px;gap:.4rem 1.2rem;}} .facts {{grid-template-columns:1fr 1fr;}} .lead,.story,.article,.notes {{padding:1.5rem;}} }}
-@media(max-width:520px) {{.stories,.caps,.dash-notes {{grid-template-columns:1fr;}} .steps {{gap:.5rem;}} .steps div {{padding:.7rem;}} .steps .kicker {{font-size:.6rem;}} .mast-top .kicker {{font-size:.6rem;}} .sec {{margin-top:3.5rem;}} }}
-@media(prefers-reduced-motion:reduce) {{html {{scroll-behavior:auto;}} .btn {{transition:none;}} .btn:hover {{transform:none;}}}}
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+:root {{
+  --paper:{PAPER}; --ink:{INK}; --muted:{MUTED};
+  --blue:{BLUE}; --orange:{ORANGE}; --pink:{PINK}; --green:{GREEN}; --clay:{CLAY}; --sand:{SAND};
+  --display: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --text: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --glass: rgba(255,255,255,.44);
+  --glass-edge: rgba(255,255,255,.82);
+  --glass-shadow: 0 1px 0 rgba(255,255,255,.95) inset, 0 -1px 0 rgba(38,38,38,.04) inset, 0 16px 40px rgba(80,58,40,.10);
+  --rule: rgba(38,38,38,.85);
+  --hair: rgba(38,38,38,.14);
+}}
+html, body, .stApp, .stApp :is(h1,h2,h3,h4,p,span,div,a,b,li,label,button,input,small,td,th):not([data-testid="stIconMaterial"]):not(.material-symbols-rounded) {{
+  font-family: var(--text) !important; -webkit-font-smoothing: antialiased; }}
+.stApp.stApp.stApp :is(h1,h2,h3,h4,b) :is(span) {{ font-family: inherit !important; }}
+[data-testid="stHeaderActionElements"] {{ display: none !important; }}
+header[data-testid="stHeader"], #MainMenu, footer, [data-testid="stToolbar"], [data-testid="stDecoration"] {{ display: none !important; }}
+
+/* Paper with soft light in the palette, so the glass has something to refract */
+.stApp {{
+  color: var(--ink); overflow-x: hidden;
+  background:
+    radial-gradient(36vw 30vw at 90% 8%, rgba(86,111,151,.16), transparent 70%),
+    radial-gradient(30vw 26vw at 4% 38%, rgba(234,97,29,.08), transparent 70%),
+    radial-gradient(34vw 28vw at 96% 60%, rgba(214,132,168,.12), transparent 70%),
+    radial-gradient(32vw 28vw at 10% 88%, rgba(136,136,108,.13), transparent 70%),
+    radial-gradient(26vw 22vw at 55% 98%, rgba(185,126,84,.12), transparent 70%),
+    {PAPER};
+  background-attachment: fixed;
+}}
+.block-container {{ max-width: 1180px; padding: 0 2rem 2rem 2rem; }}
+a {{ color: inherit; }}
+::selection {{ background: var(--blue); color: #fff; }}
+a:focus-visible, button:focus-visible {{ outline: 2px solid var(--blue); outline-offset: 3px; }}
+
+/* Liquid glass */
+.glass, .st-key-demo, .st-key-bi, .st-key-work_filter {{
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--glass-edge); box-shadow: var(--glass-shadow); border-radius: 18px; position: relative;
+}}
+.glass::before {{
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25) 100%);
+}}
+.glass > * {{ position: relative; }}
+.glass.tinted {{
+  background: linear-gradient(140deg, rgba(86,111,151,.94) 0%, rgba(86,111,151,.84) 55%, rgba(110,132,168,.80) 100%);
+  border-color: rgba(255,255,255,.45); color: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,.45) inset, 0 20px 48px rgba(60,78,110,.25);
+}}
+.glass.tinted::before {{ background: linear-gradient(135deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 75%, rgba(255,255,255,.12) 100%); }}
+
+/* Small type */
+.label {{ font-size: .8rem; color: var(--muted); }}
+.dot {{ display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: .5rem; }}
+
+/* Navigation */
+.nav {{ position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 999; width: min(1140px, calc(100vw - 24px));
+  height: 52px; display: flex; align-items: center; gap: 1.8rem; padding: 0 .5rem 0 1.2rem; font-size: .88rem; border-radius: 14px; }}
+.stApp .nav a {{ text-decoration: none; color: var(--ink) !important; }}
+.stApp .nav a:not(.brand):not(.cta):hover {{ color: var(--blue) !important; }}
+.nav .brand {{ font-weight: 600; margin-right: auto; display: flex; align-items: center; gap: .55rem; }}
+.nav .brand i {{ width: 12px; height: 12px; border-radius: 50%; background: var(--orange); display: inline-block; }}
+.stApp .nav a.cta {{ background: var(--ink); color: var(--paper) !important; padding: .5rem .95rem; border-radius: 10px; }}
+.stApp .nav a.cta:hover {{ background: var(--blue); }}
+
+/* Hero */
+.hero {{ padding: 8rem 0 0 0; }}
+.hero .meta {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; border-top: 1px solid var(--rule); padding-top: .8rem; }}
+.hero .meta div {{ font-size: .92rem; line-height: 1.45; }}
+.hero .meta .label {{ display: block; margin-bottom: .2rem; }}
+.stApp.stApp.stApp .hero h1 {{ font-family: var(--display) !important; font-weight: 800; font-size: clamp(4rem, 15.5vw, 14.5rem);
+  line-height: .84; letter-spacing: -0.055em; margin: 2.4rem 0 0 -0.05em; padding: 0 !important; color: var(--ink); }}
+.hero h1 .second {{ display: block; }}
+.hero h1 .dot2 {{ color: var(--orange); }}
+.hero .statement {{ display: grid; grid-template-columns: 1fr 3fr; gap: 1.5rem; margin-top: 2.4rem; padding-top: 1rem; border-top: 1px solid var(--rule); }}
+.stApp.stApp.stApp .hero p.lead {{ font-family: var(--display) !important; font-size: clamp(1.6rem, 3.2vw, 2.5rem); font-weight: 600;
+  line-height: 1.1; letter-spacing: -0.03em; margin: 0; max-width: 26ch; }}
+.hero p.sub {{ font-size: 1.05rem; color: var(--muted); line-height: 1.6; margin: 1rem 0 1.6rem 0; max-width: 56ch; }}
+
+.btn {{ display: inline-block; padding: .8rem 1.2rem; font-size: .92rem; font-weight: 500; text-decoration: none !important;
+  border: 1px solid var(--ink); border-radius: 10px; margin: 0 .5rem .5rem 0; transition: background .15s, color .15s, border-color .15s; }}
+.btn-solid {{ background: var(--ink); color: var(--paper) !important; }}
+.btn-solid:hover {{ background: var(--blue); border-color: var(--blue); color: #fff !important; }}
+.btn-line {{ color: var(--ink) !important; background: rgba(255,255,255,.35); }}
+.btn-line:hover {{ background: var(--ink); color: var(--paper) !important; }}
+
+/* Key figures */
+.figures {{ margin-top: 4.5rem; padding: 2rem 2rem 1.6rem 2rem; }}
+.figures .top {{ display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: end; padding-bottom: 1.6rem; }}
+.stApp.stApp.stApp .figures .big {{ font-family: var(--display) !important; font-weight: 800; font-size: clamp(3.2rem, 9.5vw, 8rem);
+  line-height: .85; letter-spacing: -0.05em; margin: 0; color: var(--blue); }}
+.figures .top p {{ margin: 0; font-size: 1rem; line-height: 1.5; color: var(--ink); }}
+.figures .row {{ display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--rule); }}
+.figures .cell {{ padding: 1rem 1rem 0 0; }}
+.figures .cell i {{ display: block; width: 26px; height: 6px; border-radius: 3px; margin-bottom: .7rem; }}
+.stApp.stApp.stApp .figures .cell b {{ display: block; font-family: var(--display) !important; font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }}
+.figures .cell span {{ display: block; font-size: .82rem; color: var(--muted); line-height: 1.4; margin-top: .45rem; }}
+
+/* Section scaffold: label column + content column */
+.sec {{ display: grid; grid-template-columns: 1fr 3fr; gap: 1.5rem; border-top: 1px solid var(--rule); padding-top: 1rem; margin-top: 7rem; scroll-margin-top: 84px; }}
+.sec .tag {{ font-size: .9rem; font-weight: 500; }}
+.stApp.stApp.stApp .sec h2 {{ font-family: var(--display) !important; font-weight: 700; font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  line-height: .95; letter-spacing: -0.045em; margin: 0 0 1rem 0; padding: 0 !important; }}
+.sec p.intro {{ font-size: 1.08rem; color: var(--muted); line-height: 1.55; max-width: 56ch; margin: 0 0 2rem 0; }}
+
+/* Capabilities: scannable index inside glass */
+.caps {{ padding: .4rem 1.6rem; }}
+.index, .path {{ border: none !important; }}
+.index td, .index th, .path td {{ border-left: none !important; border-right: none !important; border-top: none !important; }}
+.index {{ width: 100%; border-collapse: collapse; }}
+.index tr {{ border-bottom: 1px solid var(--hair); }}
+.index tr:last-child {{ border-bottom: none; }}
+.index td {{ vertical-align: top; padding: 1.1rem 1rem 1.15rem 0; font-size: .94rem; line-height: 1.5; }}
+.stApp.stApp.stApp .index td.name {{ font-family: var(--display) !important; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; width: 25%; line-height: 1.2; }}
+.index td.what {{ width: 37%; }}
+.index td.tools {{ width: 22%; color: var(--muted); font-size: .88rem; }}
+.index td.proof {{ width: 16%; font-size: .82rem; color: var(--muted); }}
+
+/* Featured project */
+.feature {{ padding: 2.4rem; }}
+.feature .grid2 {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 2.6rem; align-items: start; }}
+.feature .label {{ color: rgba(255,255,255,.82); }}
+.stApp.stApp.stApp .feature h3 {{ font-family: var(--display) !important; font-size: clamp(2.1rem, 4.2vw, 3.4rem); font-weight: 700;
+  line-height: .98; letter-spacing: -0.04em; margin: .7rem 0 1.1rem 0; padding: 0 !important; }}
+.feature p {{ font-size: 1.02rem; line-height: 1.6; color: rgba(255,255,255,.92); margin: 0 0 1.1rem 0; max-width: 54ch; }}
+.feature .btn {{ border-color: rgba(255,255,255,.9); }}
+.feature .btn-solid {{ background: #fff; color: var(--blue) !important; }}
+.feature .btn-solid:hover {{ background: var(--ink); border-color: var(--ink); color: #fff !important; }}
+.feature .btn-line {{ color: #fff !important; background: rgba(255,255,255,.1); }}
+.feature .btn-line:hover {{ background: #fff; color: var(--blue) !important; }}
+.review {{ background: rgba(255,255,255,.88); color: var(--ink); border-radius: 12px; padding: .9rem 1rem; margin-bottom: .65rem;
+  display: grid; grid-template-columns: 1fr auto; gap: .8rem; align-items: start; box-shadow: 0 6px 18px rgba(30,40,70,.12); }}
+.feature .review p {{ color: var(--ink) !important; margin: 0 !important; font-size: .95rem; line-height: 1.45; }}
+.pill {{ font-size: .72rem; font-weight: 600; padding: .22rem .55rem; border-radius: 999px; color: #fff; white-space: nowrap; }}
+.pill.neg {{ background: var(--orange); }} .pill.pos {{ background: var(--green); }} .pill.neu {{ background: {TAUPE}; }}
+.words {{ font-size: .84rem; color: rgba(255,255,255,.88); margin: .1rem 0 .9rem .2rem; }}
+.words mark {{ background: rgba(255,255,255,.2); color: #fff; padding: 0 .3rem; border-radius: 4px; }}
+.facts {{ display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.5); margin-top: 2.2rem; }}
+.facts div {{ padding: .9rem 1rem 0 0; }}
+.stApp.stApp.stApp .facts b {{ display: block; font-family: var(--display) !important; font-size: 1.9rem; font-weight: 700; letter-spacing: -0.03em; }}
+.facts span {{ font-size: .82rem; color: rgba(255,255,255,.85); line-height: 1.4; display: block; margin-top: .25rem; }}
+
+/* Filter */
+.st-key-work_filter {{ padding: .55rem .7rem; margin: 1.6rem 0 1.2rem 0; border-radius: 14px; }}
+.st-key-work_filter [data-testid="stMarkdownContainer"] p {{ margin: 0; }}
+
+/* Project cards */
+.cards {{ display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }}
+.card {{ padding: 1.6rem 1.7rem 1.3rem 1.7rem; display: flex; flex-direction: column; }}
+.card .bar {{ height: 5px; width: 44px; border-radius: 3px; margin-bottom: 1rem; }}
+.stApp.stApp.stApp .card h3 {{ font-family: var(--display) !important; font-size: clamp(1.5rem, 2.3vw, 1.95rem); font-weight: 700;
+  line-height: 1.05; letter-spacing: -0.03em; margin: .5rem 0 .8rem 0; padding: 0 !important; }}
+.card p {{ color: var(--muted); font-size: .98rem; line-height: 1.55; margin: 0 0 1.2rem 0; }}
+.card .nums {{ display: flex; gap: 2rem; margin: auto 0 1.2rem 0; border-top: 1px solid var(--hair); padding-top: .9rem; }}
+.stApp.stApp.stApp .card .nums b {{ display: block; font-family: var(--display) !important; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.03em; }}
+.card .nums span {{ font-size: .8rem; color: var(--muted); }}
+.empty {{ padding: 1.4rem 1.6rem; color: var(--muted); }}
+
+/* Dashboards */
+.dash-list {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 1.6rem; }}
+.dash-list div {{ border-top: 1px solid var(--rule); padding-top: .8rem; }}
+.dash-list b {{ display: block; font-weight: 600; margin-bottom: .3rem; }}
+.dash-list span {{ color: var(--muted); font-size: .92rem; line-height: 1.5; }}
+.st-key-bi {{ padding: 1.1rem; }}
+.st-key-bi iframe {{ border-radius: 12px; }}
+
+/* Live demo */
+.st-key-demo {{ padding: 1.7rem 1.7rem .9rem 1.7rem; }}
+.steps {{ display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); margin: .8rem 0 1.4rem 0; }}
+.steps div {{ padding: .85rem 1rem 0 0; }}
+.steps i {{ display: block; width: 22px; height: 5px; border-radius: 3px; margin-bottom: .55rem; }}
+.stApp.stApp.stApp .steps b {{ display: block; font-family: var(--display) !important; font-size: 2.3rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }}
+.steps span {{ font-size: .84rem; color: var(--muted); }}
+.check {{ font-size: .95rem; padding: .45rem 0; border-bottom: 1px solid var(--hair); display: flex; gap: .7rem; }}
+.check .ok {{ color: var(--green); font-weight: 700; }}
+.check .ko {{ color: var(--orange); font-weight: 700; }}
+.stButton button, .stDownloadButton button, .stLinkButton a {{ border-radius: 10px !important; border: 1px solid var(--ink) !important; background: rgba(255,255,255,.4) !important; }}
+.stDownloadButton button:hover {{ background: var(--ink) !important; color: var(--paper) !important; }}
+[data-testid="stExpander"] details {{ border-radius: 12px !important; background: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.85) !important; }}
+div[data-baseweb="input"], div[data-baseweb="base-input"] {{ background: rgba(255,255,255,.6) !important; }}
+
+/* About */
+.cols {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }}
+.cols div {{ border-top: 1px solid var(--rule); padding-top: .9rem; }}
+.stApp.stApp.stApp .cols h4 {{ font-family: var(--display) !important; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 .55rem 0; padding: 0 !important; }}
+.cols p {{ color: var(--muted); font-size: .97rem; line-height: 1.55; margin: 0; }}
+.timeline {{ margin-top: 2.6rem; padding: .3rem 1.6rem; }}
+.path {{ width: 100%; border-collapse: collapse; }}
+.path tr {{ border-bottom: 1px solid var(--hair); }}
+.path tr:last-child {{ border-bottom: none; }}
+.path td {{ padding: .85rem 1rem .85rem 0; font-size: .95rem; vertical-align: top; }}
+.path td.year {{ width: 18%; color: var(--muted); }}
+.path td.what {{ width: 46%; font-weight: 500; }}
+.path td.where {{ color: var(--muted); }}
+.path tr.now td.year {{ color: var(--blue); font-weight: 600; }}
+
+/* Contact */
+.contact {{ margin-top: 7rem; padding: 3.2rem 2.4rem 2rem 2.4rem; scroll-margin-top: 84px; }}
+.stApp.stApp.stApp .contact h2 {{ font-family: var(--display) !important; font-weight: 800; font-size: clamp(3.6rem, 11vw, 9rem); line-height: .86;
+  letter-spacing: -0.055em; margin: 0 0 2rem -0.04em; padding: 0 !important; color: #fff; }}
+.contact .rowc {{ display: grid; grid-template-columns: 1fr 3fr; gap: 1.5rem; border-top: 1px solid rgba(255,255,255,.5); padding-top: 1rem; }}
+.contact p {{ color: rgba(255,255,255,.88); margin: 0; font-size: .98rem; line-height: 1.5; }}
+.stApp .contact .mail {{ font-family: var(--display) !important; font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 600; text-decoration: none; color: #fff !important; border-bottom: 2px solid rgba(255,255,255,.8); }}
+.foot {{ display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin: 1.4rem .2rem 0 .2rem; }}
+
+@media (max-width: 860px) {{
+  .block-container {{ padding: 0 1rem 2rem 1rem; }}
+  .nav {{ gap: 1rem; padding: 0 .4rem 0 .9rem; font-size: .8rem; }} .nav .hide-sm {{ display: none; }}
+  .hero .meta {{ grid-template-columns: 1fr 1fr; row-gap: 1rem; }}
+  .stApp.stApp.stApp.stApp .hero h1 {{ font-size: 20vw; }}
+  .hero .statement, .sec, .figures .top, .feature .grid2, .cards, .cols, .dash-list, .contact .rowc, .steps {{ grid-template-columns: 1fr; }}
+  .figures .row {{ grid-template-columns: 1fr 1fr; }}
+  .facts {{ grid-template-columns: 1fr 1fr; }}
+  .index td.tools, .index td.proof {{ display: none; }}
+  .index td.name {{ width: 40%; }}
+  .feature, .figures, .contact {{ padding: 1.6rem 1.3rem; }}
+  .foot {{ flex-direction: column; gap: .3rem; }}
+}}
 </style>
 """)
 
 # =============================================================================
-# MASTHEAD + SECTION BAR
+# NAV + HERO + KEY FIGURES
 # =============================================================================
-swatches = "".join(f"<i style='background:{c}'></i>" for c in (BLUE, ORANGE, PINK, GREEN, CLAY))
-html(f"""
-<header class="masthead" id="front">
-<div class="mast-top"><span class="brand">MC / Portfolio</span><span class="kicker muted">Hermosillo, Mexico · Open to relocation</span></div>
-<div class="mast-grid"><div><h1>María<br>Carolina.</h1><p class="tagline">Data science / Machine learning / Data engineering</p><div class="swatches">{swatches}</div></div>
-<div class="hero-note"><p>I explore data and build tools that make the findings easier to use.</p><a class="btn btn-ink" href="#work">Explore projects ↗</a><a class="btn btn-line" href="#contact">Contact</a></div></div>
-</header>
-<nav class="sections glass" aria-label="Portfolio sections"><a href="#work">01 / Work</a><a href="#capabilities">02 / Skills</a><a href="#dashboards">03 / Dashboards</a><a href="#demo">04 / Demo</a><a href="#about">05 / About</a></nav>
-""")
-
-# =============================================================================
-# FRONT PAGE
-# =============================================================================
-figs = "".join(
-    f"<div class='figure'><div class='sw' style='background:{c}'><b>{num}</b></div>"
-    f"<div class='txt'><span class='kicker'>{name}</span><p>{text}</p></div></div>"
-    for c, num, name, text in FIGURES[:4]
+figure_cells = "".join(
+    f"<div class='cell'><i style='background:{c}'></i><b>{num}</b><span>{text}</span></div>"
+    for c, num, text in FIGURES
 )
 html(f"""
-<section class="front" aria-label="Introduction and project results">
-<article class="article glass"><span class="kicker muted">A little context</span><p class="body" style="margin-top:1rem">My background is in anthropology and data science. My projects bring together data preparation, analysis and small applications, with a growing focus on data engineering.</p></article>
-<aside class="figures" aria-label="Selected project results">{figs}</aside></section>
+<nav class="nav glass">
+<a class="brand" href="#top"><i></i>María Carolina</a>
+<a href="#work">Work</a>
+<a href="#capabilities">Capabilities</a>
+<a class="hide-sm" href="#dashboards">Dashboards</a>
+<a class="hide-sm" href="#demo">Live demo</a>
+<a class="hide-sm" href="#about">About</a>
+<a class="cta" href="#contact">Contact</a>
+</nav>
+<section class="hero" id="top">
+<div class="meta">
+<div><span class="label">Role</span>Data Scientist<br>ML and Data Engineering</div>
+<div><span class="label">Education</span>M.Sc. Data Science<br>Complutense University of Madrid</div>
+<div><span class="label">Location</span>Hermosillo, Mexico<br>Open to relocation</div>
+<div><span class="label">Languages</span>Spanish, English C1<br>German B1+</div>
+</div>
+<h1>María<span class="second">Carolina<span class="dot2">.</span></span></h1>
+<div class="statement">
+<div class="label">About this page</div>
+<div>
+<p class="lead">I like turning messy data into tools that people can use.</p>
+<p class="sub">This page collects my projects in machine learning, natural language processing, data pipelines, statistics and dashboards. Each one links to the code, a live app or a report.</p>
+<a class="btn btn-solid" href="#work">See the projects</a>
+<a class="btn btn-line" href="#demo">Try the live demo</a>
+</div>
+</div>
+</section>
+<div class="figures glass">
+<div class="top">
+<p class="big">1,157,800</p>
+<p>Spanish and English restaurant reviews from Madrid, cleaned and classified in my main project, covering 10,056 restaurants.</p>
+</div>
+<div class="row">{figure_cells}</div>
+</div>
 """)
 
 # =============================================================================
@@ -177,80 +391,79 @@ html(f"""
 # =============================================================================
 html(f"""
 <section class="sec" id="work">
-<div class="sec-head"><div><span class="kicker muted">01 / Work</span><h2>Selected work</h2></div>
-<p class="dek">A selection of applications, notebooks and analyses.</p></div>
-<article class="lead glass">
-<div class="lead-grid">
+<div class="tag">Selected work</div>
 <div>
-<span class="kicker" style="color:var(--blue)">Featured project · NLP / Deployment</span>
-<h3>Madrid Restaurant Intelligence</h3>
-<p class="body">A reputation tool for 10,056 restaurants. It summarises each restaurant, compares it with similar places, flags reputations that declined and classifies any review in Spanish or English, showing how much each word weighed in the decision.</p>
-<p class="body">The data were split by restaurant, so the final test used places the model had never seen. The model is served through a FastAPI service with tests and tracked in MLflow.</p>
-<a class="btn btn-ink" href="{LINKS['restaurants']}" target="_blank">Open the app</a>
-<a class="btn btn-line" href="{LINKS['restaurants_repo']}" target="_blank">Code</a>
+<h2>Projects.</h2>
+<p class="intro">Live apps, code and reports. Model results are measured on data the models had not seen.</p>
+</div>
+</section>
+<article class="feature glass tinted">
+<div class="grid2">
+<div>
+<span class="label">Main project · NLP, machine learning and deployment</span>
+<h3>What 1.16 million diners say about Madrid's restaurants</h3>
+<p>A reputation tool for 10,056 restaurants. It summarises each restaurant, compares it with similar places, flags reputations that declined and classifies any review in Spanish or English, showing how much each word weighed in the decision.</p>
+<p>The data were split by restaurant, so the final test used places the model had never seen. The model is served through a FastAPI service with tests and tracked in MLflow.</p>
+<a class="btn btn-solid" href="{RESTAURANT_APP}" target="_blank">Open the app ↗</a>
+<a class="btn btn-line" href="{RESTAURANT_REPO}" target="_blank">Code</a>
 </div>
 <div aria-hidden="true">
-<div class="review"><p>“La paella llegó fría y el servicio fue lentísimo.”</p><span class="tag neg">Negative</span></div>
-<p class="words">Strongest words: <mark>fría</mark> <mark>lentísimo</mark></p>
-<div class="review"><p>“Best tapas we had in Madrid, the staff were lovely.”</p><span class="tag pos">Positive</span></div>
-<div class="review"><p>“Correcto, sin más. Precio un poco alto.”</p><span class="tag neu">Neutral</span></div>
+<div class="review"><p>“La paella llegó fría y el servicio fue lentísimo.”</p><span class="pill neg">Negative</span></div>
+<p class="words">Words that weighed most: <mark>fría</mark> <mark>lentísimo</mark></p>
+<div class="review"><p>“Best tapas we had in Madrid, the staff were lovely.”</p><span class="pill pos">Positive</span></div>
+<div class="review"><p>“Correcto, sin más. Precio un poco alto.”</p><span class="pill neu">Neutral</span></div>
 </div>
 </div>
 <div class="facts">
-<div><b style="color:var(--blue)">110,912</b><span>test reviews from 996 unseen restaurants</span></div>
-<div><b style="color:var(--orange)">0.879</b><span>recall on negative reviews</span></div>
-<div><b style="color:var(--pink)">0.809 / 0.793</b><span>macro F1 in Spanish and English</span></div>
-<div><b style="color:var(--green)">28,660</b><span>backtest evaluations of the alert rule</span></div>
+<div><b>110,912</b><span>test reviews from 996 unseen restaurants</span></div>
+<div><b>0.809 / 0.793</b><span>macro F1 in Spanish and English</span></div>
+<div><b>0.905</b><span>accuracy on the test set</span></div>
+<div><b>28,660</b><span>backtest evaluations of the alert rule</span></div>
 </div>
 </article>
-<div class="stories">
-<article class="story glass" style="--accent:{ORANGE}">
-<div class="row"><span class="kicker muted">Machine learning · competition</span></div>
-<h3>Water pump classification</h3>
-<p>60,000 water points in Tanzania with three possible outcomes. Feature engineering, target encoding fitted on training data only, and gradient boosting tuned with Optuna.</p>
-<div class="nums"><div><b>0.8132</b><span>leaderboard</span></div><div><b>0.817</b><span>5-fold CV</span></div></div>
-<a class="btn btn-line" href="{LINKS['pumps']}" target="_blank">Code</a>
-</article>
-<article class="story glass" style="--accent:{PINK}">
-<div class="row"><span class="kicker muted">Python app · live</span></div>
-<h3>Guess the Number</h3>
-<p>A console game turned into a Streamlit app with game modes, difficulty levels, scoring, saved results and a records screen with a leaderboard and charts.</p>
-<div class="nums"><div><b>3</b><span>difficulty levels</span></div><div><b>6</b><span>modules</span></div></div>
-<a class="btn btn-ink" href="{LINKS['guess']}" target="_blank">Play</a>
-<a class="btn btn-line" href="{LINKS['guess_repo']}" target="_blank">Code</a>
-</article>
-<article class="story glass" style="--accent:{GREEN}">
-<div class="row"><span class="kicker muted">Data engineering</span></div>
-<h3>Hostname data pipeline</h3>
-<p>Hostnames created from a naming convention, parsed into fields and validated. An improved version runs in the demo section below.</p>
-<div class="nums"><div><b>1,500</b><span>records</span></div><div><b>5</b><span>quality checks</span></div></div>
-<a class="btn btn-ink" href="#demo">Try it</a>
-<a class="btn btn-line" href="{LINKS['hostnames']}" target="_blank">Report</a>
-</article>
-<article class="story glass" style="--accent:{CLAY}">
-<div class="row"><span class="kicker muted">Statistics · health data</span></div>
-<h3>Glucose tolerance in young and adult patients</h3>
-<p>Two groups compared with normality checks, t-tests and ANOVA, plus a regression that predicts glucose 60 minutes after intake.</p>
-<div class="nums"><div><b>0.634</b><span>R²</span></div><div><b>4.61</b><span>RMSE, mg/dL</span></div></div>
-<a class="btn btn-line" href="{LINKS['glucose']}" target="_blank">Report</a>
-</article>
-</div>
-</section>
 """)
+
+with st.container(key="work_filter"):
+    area = st.segmented_control(
+        "Filter projects", ["All", "Machine learning", "Data engineering", "Statistics and BI", "Apps"],
+        default="All", label_visibility="collapsed",
+    ) or "All"
+
+
+def project_card(p: dict) -> str:
+    nums = "".join(f"<div><b style='color:{p['color']}'>{n}</b><span>{l}</span></div>" for n, l in p["nums"])
+    buttons = ""
+    for label, url, primary in p["links"]:
+        style = "btn-solid" if primary else "btn-line"
+        target = "" if url.startswith("#") else ' target="_blank"'
+        buttons += f"<a class='btn {style}' href='{url}'{target}>{label}</a>"
+    return (f"<article class='card glass'><div class='bar' style='background:{p['color']}'></div>"
+            f"<span class='label'>{p['kicker']}</span><h3>{p['title']}</h3><p>{p['text']}</p>"
+            f"<div class='nums'>{nums}</div><div>{buttons}</div></article>")
+
+
+shown = [p for p in PROJECTS if area == "All" or area in p["areas"]]
+if shown:
+    html(f"<div class='cards'>{''.join(project_card(p) for p in shown)}</div>")
+else:
+    html("<div class='empty glass'>The main project above covers this area.</div>")
 
 # =============================================================================
 # CAPABILITIES
 # =============================================================================
-caps = "".join(
-    f"<div class='cap'><span class='dot' style='background:{c}'></span><div>"
-    f"<h3>{name}</h3><p>{what}</p><div class='tools'>{tools}</div><div class='where'>{where}</div></div></div>"
-    for name, c, what, tools, where in CAPABILITIES
+rows = "".join(
+    f"<tr><td class='name'><span class='dot' style='background:{c}'></span>{name}</td><td class='what'>{what}</td>"
+    f"<td class='tools'>{tools}</td><td class='proof'>{proof}</td></tr>"
+    for name, c, what, tools, proof in CAPABILITIES
 )
 html(f"""
 <section class="sec" id="capabilities">
-<div class="sec-head"><div><span class="kicker muted">02 / Skills</span><h2>Capabilities</h2></div>
-<p class="dek">Tools and methods used across my projects.</p></div>
-<div class="caps">{caps}</div>
+<div class="tag">Capabilities</div>
+<div>
+<h2>Areas I work in.</h2>
+<p class="intro">What each area involves, the tools I use and the project where you can see it.</p>
+<div class="caps glass"><table class="index">{rows}</table></div>
+</div>
 </section>
 """)
 
@@ -259,12 +472,15 @@ html(f"""
 # =============================================================================
 html(f"""
 <section class="sec" id="dashboards">
-<div class="sec-head"><div><span class="kicker muted">03 / Dashboards</span><h2>Dashboards</h2></div>
-<p class="dek">Easy Loans: a year of lending across Europe, in Tableau.</p></div>
-<div class="dash-notes">
-<div style="--accent:{BLUE}"><b>Loan operations</b><span>KPIs, deviation from the average, running total and date and country filters.</span></div>
-<div style="--accent:{ORANGE}"><b>Merchant analysis</b><span>Top 10 merchants, merchants by country and an interactive map.</span></div>
-<div style="--accent:{GREEN}"><b>Details</b><span>LOD and table calculations, a minimum-amount parameter and reset buttons.</span></div>
+<div class="tag">Business intelligence</div>
+<div>
+<h2>Dashboards.</h2>
+<p class="intro">Easy Loans: a year of lending across Europe in two interactive Tableau dashboards. Filter by date and country, hover for details and click to cross-filter.</p>
+<div class="dash-list">
+<div><b><span class="dot" style="background:{BLUE}"></span>Loan operations</b><span>KPIs, deviation from the average, running total, date and country filters.</span></div>
+<div><b><span class="dot" style="background:{ORANGE}"></span>Merchant analysis</b><span>Top 10 merchants, merchants by country and an interactive map.</span></div>
+<div><b><span class="dot" style="background:{GREEN}"></span>Details</b><span>LOD and table calculations, a minimum-amount parameter and reset buttons.</span></div>
+</div>
 </div>
 </section>
 """)
@@ -338,23 +554,26 @@ def validate(df: pd.DataFrame) -> dict:
         "Node numbers within 001–999": bool(df["node"].between(1, 999).all()),
         "No duplicate hostnames": duplicates == 0,
     }
-    rows = []
+    rows_ = []
     for field, mapping in (("os", OS_MAP), ("environment", ENV_MAP), ("country", COUNTRY_MAP)):
         observed = df[field].value_counts(normalize=True)
         for label, target in mapping.values():
-            rows.append({"field": field, "category": label, "target": target,
-                         "observed": float(observed.get(label, 0.0))})
-    dist = pd.DataFrame(rows)
+            rows_.append({"field": field, "category": label, "target": target,
+                          "observed": float(observed.get(label, 0.0))})
+    dist = pd.DataFrame(rows_)
     dist["gap_pp"] = (dist["observed"] - dist["target"]).abs() * 100
     return {"checks": checks, "duplicates": duplicates, "distribution": dist}
 
 
-PLOT_FONT = dict(family="Inter, Helvetica Neue, Arial, sans-serif", color=INK, size=13)
+PLOT_FONT = dict(family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif", color=INK, size=13)
 
 html("""
 <section class="sec" id="demo">
-<div class="sec-head"><div><span class="kicker muted">04 / Demo</span><h2>Live demo</h2></div>
-<p class="dek">A small data pipeline: generate a server inventory, parse it and check its quality.</p></div>
+<div class="tag">Live demo</div>
+<div>
+<h2>A small pipeline you can try.</h2>
+<p class="intro">Generate a server inventory, then see it parsed into fields and checked for quality.</p>
+</div>
 </section>
 """)
 
@@ -373,9 +592,9 @@ with st.container(key="demo"):
 
     html(f"""
     <div class="steps">
-    <div style="--accent:{BLUE}"><span class="kicker">1 · Generate</span><b>{len(raw):,}</b><small>hostnames</small></div>
-    <div style="--accent:{CLAY}"><span class="kicker">2 · Parse</span><b>{data.shape[1]}</b><small>structured fields</small></div>
-    <div style="--accent:{GREEN}"><span class="kicker">3 · Validate</span><b>{passed}/{len(report['checks'])}</b><small>checks passed</small></div>
+    <div><i style="background:{BLUE}"></i><span>1 · Generate</span><b>{len(raw):,}</b><span>hostnames</span></div>
+    <div><i style="background:{CLAY}"></i><span>2 · Parse</span><b>{data.shape[1]}</b><span>structured fields</span></div>
+    <div><i style="background:{GREEN}"></i><span>3 · Validate</span><b>{passed}/{len(report['checks'])}</b><span>checks passed</span></div>
     </div>
     """)
 
@@ -424,23 +643,26 @@ with st.container(key="demo"):
 # =============================================================================
 # ABOUT
 # =============================================================================
-html(f"""
+html("""
 <section class="sec" id="about">
-<div class="sec-head"><div><span class="kicker muted">05 / About</span><h2>About</h2></div>
-<p class="dek">How I like to work, and the path that brought me here.</p></div>
-<div class="about">
-<div class="notes glass">
-<div class="note"><h4>Questions first</h4><p>Anthropology taught me to interview, observe and define the problem before choosing a method.</p></div>
-<div class="note"><h4>Careful validation</h4><p>I use separate test data and quality checks to understand what a model can and cannot do.</p></div>
-<div class="note"><h4>Languages</h4><p>Spanish (native), English (C1) and German (B1+, learning).</p></div>
+<div class="tag">About</div>
+<div>
+<h2>About me.</h2>
+<p class="intro">How I like to work, and the path that brought me here.</p>
+<div class="cols">
+<div><h4>Questions first</h4><p>Anthropology taught me to interview, observe and define the problem before choosing a method.</p></div>
+<div><h4>Careful validation</h4><p>Separate test data, leakage checks and quality tests, to understand what a model can and cannot do.</p></div>
+<div><h4>Languages</h4><p>Spanish (native), English (C1) and German (B1+), which I keep studying.</p></div>
 </div>
+<div class="timeline glass">
 <table class="path">
-<tr><td class="year">2025–2026</td><td class="what"><b>M.Sc. Data Science, Big Data &amp; Business Analytics</b><span>Complutense University of Madrid</span></td></tr>
-<tr><td class="year">2024–2025</td><td class="what"><b>Data Science Bootcamp</b><span>TripleTen</span></td></tr>
-<tr><td class="year">2024</td><td class="what"><b>Survey data analysis, internship</b><span>Hermosillo City Hall</span></td></tr>
-<tr><td class="year">2023</td><td class="what"><b>Social development research, internship</b><span>Ministry of Social Development of Sonora</span></td></tr>
-<tr><td class="year">2019–2024</td><td class="what"><b>B.A. Anthropology</b><span>University of Sonora</span></td></tr>
+<tr class="now"><td class="year">2025–2026</td><td class="what">M.Sc. Data Science, Big Data &amp; Business Analytics</td><td class="where">Complutense University of Madrid</td></tr>
+<tr><td class="year">2024–2025</td><td class="what">Data Science Bootcamp</td><td class="where">TripleTen</td></tr>
+<tr><td class="year">2024</td><td class="what">Survey data analysis, internship</td><td class="where">Hermosillo City Hall</td></tr>
+<tr><td class="year">2023</td><td class="what">Social development research, internship</td><td class="where">Ministry of Social Development of Sonora</td></tr>
+<tr><td class="year">2019–2024</td><td class="what">B.A. Anthropology</td><td class="where">University of Sonora</td></tr>
 </table>
+</div>
 </div>
 </section>
 """)
@@ -449,12 +671,12 @@ html(f"""
 # CONTACT + FOOTER
 # =============================================================================
 html(f"""
-<section class="contact glass" id="contact">
-<span class="kicker muted">Contact</span>
-<h2>Get in touch</h2>
-<p>Interested in opportunities in data science and data engineering.</p>
-<a class="mail" href="{LINKS['email']}">Carolinagles@gmail.com</a>
-
+<section class="contact glass tinted" id="contact">
+<h2>Let's talk.</h2>
+<div class="rowc">
+<p>Open to Data Scientist, ML and Data Engineering roles. I would be glad to hear from you.</p>
+<div><a class="mail" href="mailto:{EMAIL}">{EMAIL}</a></div>
+</div>
 </section>
-<div class="foot">María Carolina González Bernal</div>
+<div class="foot"><span>María Carolina González Bernal</span><span>Built with Python, Streamlit and Plotly</span></div>
 """)
