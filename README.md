@@ -1,15 +1,15 @@
 # María Carolina · Data Science & Data Engineering Portfolio
 
 A one-page portfolio built with Streamlit, custom HTML and CSS.
-Design: Swiss / International Typographic Style, with International Klein Blue as the only accent.
+Design: an editorial newspaper page with liquid-glass panels and a warm 2027 colour palette.
 
 **Sections**
-- **Hero** and a blue band with the headline numbers.
+- **Masthead** and a front page with an introduction and key figures.
 - **Capabilities**: six skills, each linked to the project that proves it.
 - **Selected work**: Madrid Restaurant Intelligence (featured), Pump It Up, Guess the Number, the hostname pipeline and the glucose study.
 - **Dashboards**: the Easy Loans Tableau dashboards, embedded from Tableau Public.
 - **Live demo**: a working data pipeline that generates, parses and validates a server inventory, with a CSV download.
-- **About** and **Contact**.
+- **About** and **Contact** (email).
 
 ## Run locally
 ```bash
