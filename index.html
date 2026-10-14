@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>María Carolina · Data Scientist</title>
+<meta name="description" content="Portfolio of María Carolina González Bernal: machine learning, natural language processing, data pipelines, statistics and dashboards.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='0' fill='none'/%3E%3Crect x='2' y='2' width='12' height='12' fill='%23B5506E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Restrained, high-trust palette: white, slate ink, one petrol accent */
+  --paper:#FBFCFC; --ink:#111827; --muted:#4B5563;
+  --red:#0F766E; --red-deep:#0B5C56; --magenta:#B42318;
+  --blue:#111827; --orange:#0F766E; --pink:#4D9C94; --green:#94A3B8; --clay:#CBD5E1; --sand:#D5DCE4; --taupe:#94A3B8;
+  --display:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --text:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --glass:rgba(255,255,255,.6); --glass-edge:rgba(255,255,255,.95);
+  --glass-shadow:inset 0 1px 0 rgba(255,255,255,1), inset 0 0 0 1px rgba(255,255,255,.4),
+    0 0 0 1px rgba(17,24,39,.06), 0 1px 2px rgba(17,24,39,.04), 0 16px 36px -18px rgba(17,24,39,.16);
+  --rule:#111827; --hair:rgba(17,24,39,.1);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:84px; }
+body { margin:0; color:var(--ink); font-family:var(--text); -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  background:var(--paper); position:relative; isolation:isolate; }
+/* Engineering dot grid, fading out toward the edges */
+body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background-image:radial-gradient(rgba(17,24,39,.08) 1px, transparent 1.3px); background-size:24px 24px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%); }
+/* Aurora light behind the hero, in the palette */
+.aurora { position:absolute; inset:0 0 auto 0; height:1100px; z-index:-1; pointer-events:none; overflow:hidden; }
+.aurora span { position:absolute; border-radius:50%; filter:blur(90px); }
+.aurora .a1 { width:620px; height:520px; right:-80px; top:-160px; background:rgba(52,211,153,.14); }
+.aurora .a2 { width:520px; height:460px; right:300px; top:60px; background:rgba(15,118,110,.08); }
+.aurora .a3 { width:560px; height:420px; right:-60px; top:420px; background:rgba(204,236,228,.45); }
+.aurora .a4 { display:none; }
+.aurora::after { content:""; position:absolute; inset:auto 0 0 0; height:320px; background:linear-gradient(to bottom, transparent, var(--paper)); }
+.aurora-low { position:absolute; left:0; right:0; height:900px; z-index:-1; pointer-events:none; overflow:hidden; }
+.aurora-low span { position:absolute; border-radius:50%; filter:blur(100px); }
+a { color:inherit; }
+::selection { background:var(--red); color:#fff; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid var(--red); outline-offset:3px; }
+h1,h2,h3,h4,p { margin:0; }
+.wrap { max-width:1180px; margin:0 auto; padding:0 2rem 2rem; }
+
+/* Liquid glass */
+.glass { background:linear-gradient(140deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.62) 50%, rgba(255,255,255,.78) 100%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%); backdrop-filter:blur(28px) saturate(180%);
+  border:1px solid var(--glass-edge); box-shadow:var(--glass-shadow); border-radius:16px; position:relative; }
+.glass::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:radial-gradient(120% 70% at 12% -20%, rgba(255,255,255,.8), transparent 55%),
+             radial-gradient(70% 50% at 100% 120%, rgba(255,255,255,.4), transparent 60%); }
+.glass::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; padding:1.5px;
+  background:linear-gradient(135deg, rgba(255,255,255,1), rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.75));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.glass > * { position:relative; z-index:1; }
+.glass:not(.tinted):not(.nav) { box-shadow:var(--glass-shadow); border-color:rgba(255,255,255,.95); }
+.nav.glass { background:linear-gradient(140deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.62) 50%, rgba(255,255,255,.78) 100%); }
+.glass.tinted { color:#fff; border-color:rgba(255,255,255,.35); }
+.glass.tinted.ink { background:linear-gradient(150deg, rgba(17,24,39,.95) 0%, rgba(17,24,39,.9) 60%, rgba(18,58,62,.88) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 24px 50px -24px rgba(17,24,39,.45); }
+.glass.tinted.red { background:linear-gradient(150deg, rgba(17,24,39,.96) 0%, rgba(17,24,39,.92) 55%, rgba(15,118,110,.9) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 24px 50px -24px rgba(17,24,39,.45); }
+.glass.tinted::before { background:radial-gradient(120% 70% at 12% -20%, rgba(255,255,255,.28), transparent 55%); }
+.glass.tinted::after { background:linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0) 35%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25)); }
+
+.label { font-size:.8rem; color:var(--muted); }
+.dot { display:inline-block; width:10px; height:10px; border-radius:50%; vertical-align:middle; margin-right:.5rem; }
+
+/* Navigation */
+.nav { position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:50; width:min(1140px, calc(100vw - 24px));
+  height:52px; display:flex; align-items:center; gap:1.8rem; padding:0 .5rem 0 1.2rem; font-size:.88rem; border-radius:14px; }
+.nav a { text-decoration:none; }
+.nav a:not(.brand):not(.cta):hover { color:var(--red); }
+.nav .brand { font-weight:600; margin-right:auto; display:flex; align-items:center; gap:.55rem; }
+.nav .brand i { width:12px; height:12px; background:var(--red); display:inline-block; }
+.nav a.cta { background:var(--ink); color:var(--paper); padding:.5rem .95rem; border-radius:10px; }
+.nav a.cta:hover { background:var(--red); }
+
+/* Hero */
+.hero { padding:8rem 0 0; }
+.hero .meta { display:grid; grid-template-columns:repeat(4, 1fr); gap:1.5rem; border-top:1px solid var(--rule); padding-top:.8rem; }
+.hero .meta div { font-size:.92rem; line-height:1.45; }
+.hero .meta .label { display:block; margin-bottom:.2rem; }
+.hero h1 { font-family:var(--display); font-weight:700; font-size:clamp(4rem, 15.5vw, 14.5rem); line-height:.84; letter-spacing:-.055em; margin:2.4rem 0 0 -.05em; }
+.hero h1 .second { display:block; }
+.hero h1 .dot2 { color:var(--red); }
+.hero .statement { display:grid; grid-template-columns:1fr 3fr; gap:1.5rem; margin-top:2.4rem; padding-top:1rem; border-top:1px solid var(--rule); }
+.hero p.lead { font-family:var(--display); font-size:clamp(1.6rem, 3.2vw, 2.5rem); font-weight:600; line-height:1.1; letter-spacing:-.03em; max-width:26ch; }
+.hero p.sub { font-size:1.05rem; color:var(--muted); line-height:1.6; margin:1rem 0 1.6rem; max-width:56ch; }
+.hero p.sub a { color:var(--ink); font-weight:500; text-underline-offset:3px; }
+
+.btn { display:inline-block; padding:.8rem 1.2rem; font:500 .92rem var(--text); text-decoration:none; border:1px solid var(--ink); border-radius:999px;
+  margin:0 .5rem .5rem 0; cursor:pointer; transition:background .15s, color .15s, border-color .15s; }
+.btn-solid { background:var(--ink); color:var(--paper); }
+.btn-solid:hover { background:var(--red); border-color:var(--red); color:#fff; }
+.btn-line { color:var(--ink); background:rgba(255,255,255,.35); }
+.btn-line:hover { background:var(--ink); color:var(--paper); }
+
+/* Key figures */
+.figures { margin-top:4.5rem; padding:2rem 2rem 1.6rem; }
+.figures .top { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:end; padding-bottom:1.6rem; }
+.figures .big { font-family:var(--display); font-weight:700; font-size:clamp(3.2rem, 9.5vw, 8rem); line-height:.85; letter-spacing:-.05em; color:var(--ink); }
+.figures .top p:not(.big) { font-size:1rem; line-height:1.5; }
+.figures .row { display:grid; grid-template-columns:repeat(5, 1fr); border-top:1px solid var(--rule); }
+.figures .cell { padding:1rem 1rem 0 0; }
+.figures .cell i { display:block; width:26px; height:4px; margin-bottom:.7rem; }
+.figures .cell b { display:block; font-family:var(--display); font-size:clamp(1.7rem, 3vw, 2.4rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.figures .cell span { display:block; font-size:.82rem; color:var(--muted); line-height:1.4; margin-top:.45rem; }
+
+/* Section scaffold */
+.sec { display:grid; grid-template-columns:1fr 3fr; gap:1.5rem; border-top:1px solid var(--rule); padding-top:1rem; margin-top:7rem; }
+.sec .tag { font-size:.9rem; font-weight:500; display:flex; gap:.9rem; }
+.sec .tag b { font-weight:600; color:var(--red); font-variant-numeric:tabular-nums; }
+.sec h2 { font-family:var(--display); font-weight:700; font-size:clamp(2.4rem, 5.2vw, 4.2rem); line-height:.95; letter-spacing:-.045em; margin:0 0 1rem; }
+.sec p.intro a { color:var(--ink); font-weight:500; text-underline-offset:3px; }
+.sec p.intro { font-size:1.08rem; color:var(--muted); line-height:1.55; max-width:56ch; margin:0 0 2rem; }
+
+/* Deep-dive banner */
+.deep { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1.3rem 1.6rem; margin:0 0 1.4rem; }
+.deep p { font-size:1rem; line-height:1.5; max-width:62ch; }
+.deep p b { font-weight:600; }
+.deep .btn { margin:0; white-space:nowrap; }
+
+/* Featured project */
+.feature { padding:2.4rem; }
+.feature .grid2 { display:grid; grid-template-columns:1.15fr 1fr; gap:2.6rem; align-items:start; }
+.feature .label { color:rgba(255,255,255,.82); }
+.feature h3 { font-family:var(--display); font-size:clamp(2.1rem, 4.2vw, 3.4rem); font-weight:700; line-height:.98; letter-spacing:-.04em; margin:.7rem 0 1.1rem; }
+.feature p { font-size:1.02rem; line-height:1.6; color:rgba(255,255,255,.92); margin:0 0 1.1rem; max-width:54ch; }
+.feature .btn { border-color:rgba(255,255,255,.9); }
+.feature .btn-solid { background:#fff; color:var(--ink); }
+.feature .btn-solid:hover { background:var(--red); border-color:var(--red); color:#fff; }
+.feature .btn-line { color:#fff; background:rgba(255,255,255,.1); }
+.feature .btn-line:hover { background:#fff; color:var(--ink); }
+.example-note { font-size:.78rem; color:rgba(255,255,255,.75); margin:0 0 .6rem .2rem; }
+.review { background:rgba(255,255,255,.88); color:var(--ink); border-radius:12px; padding:.9rem 1rem; margin-bottom:.65rem;
+  display:grid; grid-template-columns:1fr auto; gap:.8rem; align-items:start; box-shadow:0 6px 18px rgba(30,40,70,.12); }
+.feature .review p { color:var(--ink); margin:0; font-size:.95rem; line-height:1.45; }
+.pill { font-size:.72rem; font-weight:600; padding:.22rem .55rem; border-radius:999px; color:#fff; white-space:nowrap; }
+.pill.neg { background:#B42318; } .pill.pos { background:#0F766E; } .pill.neu { background:#94A3B8; }
+.words { font-size:.84rem; color:rgba(255,255,255,.88); margin:.1rem 0 .9rem .2rem; }
+.words mark { background:rgba(255,255,255,.16); color:#fff; padding:0 .3rem; border-radius:4px; }
+.facts { display:grid; grid-template-columns:repeat(4, 1fr); border-top:1px solid rgba(255,255,255,.5); margin-top:2.2rem; }
+.facts div { padding:.9rem 1rem 0 0; }
+.facts b { display:block; font-family:var(--display); font-size:1.9rem; font-weight:700; letter-spacing:-.03em; }
+.facts span { font-size:.82rem; color:rgba(255,255,255,.85); line-height:1.4; display:block; margin-top:.25rem; }
+
+/* Segmented control */
+.seg { display:inline-flex; flex-wrap:wrap; gap:4px; padding:.45rem; border-radius:14px; }
+.seg button { font:500 .88rem var(--text); color:var(--ink); background:transparent; border:0; border-radius:999px; padding:.55rem .95rem; cursor:pointer; }
+.seg button:hover { background:rgba(255,255,255,.55); }
+.seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
+.filter { margin:1.6rem 0 1.2rem; }
+
+/* Project cards */
+.cards { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+.card { padding:1.6rem 1.7rem 1.3rem; display:flex; flex-direction:column; }
+.card[hidden] { display:none; }
+.card .bar { height:4px; width:44px; margin-bottom:1rem; }
+.card h3 { font-family:var(--display); font-size:clamp(1.5rem, 2.3vw, 1.95rem); font-weight:700; line-height:1.05; letter-spacing:-.03em; margin:.5rem 0 .8rem; }
+.card p { color:var(--muted); font-size:.98rem; line-height:1.55; margin:0 0 1.2rem; }
+.card .nums { display:flex; gap:2rem; margin:auto 0 1.2rem; border-top:1px solid var(--hair); padding-top:.9rem; }
+.card .nums b { color:var(--ink) !important; display:block; font-family:var(--display); font-size:1.7rem; font-weight:700; letter-spacing:-.03em; }
+.card .nums span { font-size:.8rem; color:var(--muted); }
+.empty { padding:1.4rem 1.6rem; color:var(--muted); }
+.empty[hidden] { display:none; }
+
+/* Capabilities */
+.caps { padding:.4rem 1.6rem; }
+.index { width:100%; border-collapse:collapse; }
+.index tr { border-bottom:1px solid var(--hair); }
+.index tr:last-child { border-bottom:none; }
+.index td { vertical-align:top; padding:1.1rem 1rem 1.15rem 0; font-size:.94rem; line-height:1.5; }
+.index td.name { font-family:var(--display); font-size:1.25rem; font-weight:600; letter-spacing:-.02em; width:25%; line-height:1.2; }
+.index td.what { width:37%; }
+.index td.tools { width:22%; color:var(--muted); font-size:.88rem; }
+.index td.proof { width:16%; font-size:.82rem; color:var(--muted); }
+
+/* Dashboards */
+.dash-list { display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem; margin-bottom:1.6rem; }
+.dash-list div { border-top:1px solid var(--rule); padding-top:.8rem; }
+.dash-list b { display:block; font-weight:600; margin-bottom:.3rem; }
+.dash-list span { color:var(--muted); font-size:.92rem; line-height:1.5; }
+.bi { padding:1.1rem; }
+.bi-top { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+.bi-top .seg { padding:0; background:none; }
+.bi-top .btn { margin:0; }
+.bi-frame { border-radius:12px; overflow:hidden; background:rgba(255,255,255,.6); }
+.bi-frame iframe { display:block; width:100%; height:860px; border:0; }
+
+/* Live demo */
+.demo { padding:1.7rem 1.7rem 1.2rem; }
+.controls { display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem; align-items:end; }
+.controls.simple { grid-template-columns:2fr 1fr; row-gap:.6rem; }
+.controls.simple .btn { margin:0; width:auto; }
+.controls .hint.wide { grid-column:1 / -1; margin:0; font-size:.86rem; }
+.controls label { display:block; font-size:.88rem; margin-bottom:.45rem; }
+.controls output { float:right; font-weight:600; font-variant-numeric:tabular-nums; }
+input[type=range] { width:100%; accent-color:var(--red); }
+input[type=number] { width:100%; font:500 1rem var(--text); padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(38,38,38,.25); background:rgba(255,255,255,.6); }
+.toggle { display:flex; align-items:center; gap:.7rem; font-size:.9rem; cursor:pointer; }
+.toggle input { width:40px; height:22px; appearance:none; -webkit-appearance:none; border-radius:999px; background:rgba(38,38,38,.2); position:relative; cursor:pointer; transition:background .15s; flex:none; }
+.toggle input::after { content:""; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .15s; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.toggle input:checked { background:var(--red); }
+.toggle input:checked::after { transform:translateX(18px); }
+.hint { font-size:.78rem; color:var(--muted); margin-top:.35rem; }
+.steps { display:grid; grid-template-columns:repeat(3, 1fr); border-top:1px solid var(--rule); margin:1.6rem 0 1.4rem; }
+.steps div { padding:.85rem 1rem 0 0; }
+.steps i { display:block; width:22px; height:5px; border-radius:3px; margin-bottom:.55rem; }
+.steps b { display:block; font-family:var(--display); font-size:2.3rem; font-weight:700; letter-spacing:-.03em; line-height:1.05; }
+.steps span { font-size:.84rem; color:var(--muted); }
+.demo-grid { display:grid; grid-template-columns:1fr 1.7fr; gap:2rem; }
+.check { font-size:.95rem; padding:.45rem 0; border-bottom:1px solid var(--hair); display:flex; gap:.7rem; }
+.check .ok { color:var(--ink); font-weight:700; } .check .ko { color:var(--magenta); font-weight:700; }
+.dup { color:var(--magenta); margin:.8rem 0 0; }
+.gap { color:var(--muted); margin:1rem 0; }
+.gap b { color:var(--ink); }
+.demo .btn { width:100%; text-align:center; }
+.chart-head { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:.6rem; }
+.chart-head .seg { padding:0; background:none; }
+.legend { display:flex; gap:1rem; font-size:.82rem; color:var(--muted); flex-wrap:wrap; }
+.legend i { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:.35rem; vertical-align:-1px; }
+svg.chart { width:100%; height:auto; display:block; font-family:var(--text); }
+svg.chart text { fill:var(--ink); font-size:12px; }
+svg.chart .muted { fill:var(--muted); }
+svg.chart .grid { stroke:rgba(38,38,38,.08); }
+.chart-title { font-size:.9rem; font-weight:500; margin:1.8rem 0 .5rem; }
+details.preview { margin-top:1.4rem; border-radius:12px; background:rgba(255,255,255,.4); border:1px solid rgba(255,255,255,.85); }
+details.preview summary { padding:.8rem 1rem; cursor:pointer; font-size:.92rem; }
+.table-wrap { overflow:auto; max-height:420px; padding:0 1rem 1rem; }
+.table-wrap table { width:100%; border-collapse:collapse; font-size:.86rem; }
+.table-wrap th, .table-wrap td { text-align:left; padding:.45rem .6rem .45rem 0; border-bottom:1px solid var(--hair); white-space:nowrap; }
+.table-wrap th { color:var(--muted); font-weight:500; position:sticky; top:0; background:rgba(253,246,248,.95); }
+.table-wrap td:first-child { font-family:ui-monospace, "SF Mono", Menlo, monospace; }
+
+/* About */
+.cols { display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem; }
+.cols div { border-top:1px solid var(--rule); padding-top:.9rem; }
+.cols h4 { font-family:var(--display); font-size:1.3rem; font-weight:600; letter-spacing:-.02em; margin:0 0 .55rem; }
+.cols p { color:var(--muted); font-size:.97rem; line-height:1.55; }
+.timeline { margin-top:2.6rem; padding:.3rem 1.6rem; }
+.path { width:100%; border-collapse:collapse; }
+.path tr { border-bottom:1px solid var(--hair); }
+.path tr:last-child { border-bottom:none; }
+.path td { padding:.85rem 1rem .85rem 0; font-size:.95rem; vertical-align:top; }
+.path td.year { width:18%; color:var(--muted); }
+.path td.what { width:46%; font-weight:500; }
+.path td.where { color:var(--muted); }
+.path tr.now td.year { color:var(--red); font-weight:600; }
+
+/* Contact */
+.contact { margin-top:7rem; padding:3.2rem 2.4rem 2rem; }
+.contact h2 { font-family:var(--display); font-weight:700; font-size:clamp(3.6rem, 11vw, 9rem); line-height:.86; letter-spacing:-.055em; margin:0 0 2rem -.04em; color:#fff; }
+.contact .rowc { display:grid; grid-template-columns:1fr 3fr; gap:1.5rem; border-top:1px solid rgba(255,255,255,.5); padding-top:1rem; }
+.contact p { color:rgba(255,255,255,.88); font-size:.98rem; line-height:1.5; }
+.contact .mail { font-family:var(--display); font-size:clamp(1.4rem, 3vw, 2.2rem); font-weight:600; text-decoration:none; color:#fff; border-bottom:2px solid rgba(255,255,255,.8); }
+.foot { display:flex; justify-content:space-between; font-size:.8rem; color:var(--muted); margin:1.4rem .2rem 0; }
+
+@media (max-width:860px) {
+  .wrap { padding:0 1rem 2rem; }
+  .nav { gap:1rem; padding:0 .4rem 0 .9rem; font-size:.8rem; } .nav .hide-sm { display:none; }
+  .hero .meta { grid-template-columns:1fr 1fr; row-gap:1rem; }
+  .hero h1 { font-size:20vw; }
+  .hero .statement, .sec, .figures .top, .feature .grid2, .cards, .cols, .dash-list, .contact .rowc, .steps, .controls, .demo-grid { grid-template-columns:1fr; }
+  .figures .row { grid-template-columns:1fr 1fr; }
+  .facts { grid-template-columns:1fr 1fr; }
+  .index td.tools, .index td.proof { display:none; }
+  .index td.name { width:40%; }
+  .feature, .figures, .contact, .demo { padding:1.6rem 1.3rem; }
+  .deep { flex-direction:column; align-items:flex-start; }
+  .bi-frame iframe { height:640px; }
+  .foot { flex-direction:column; gap:.3rem; }
+}
+@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } * { transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+
+<nav class="nav glass" aria-label="Main">
+  <a class="brand" href="#top"><i></i>María Carolina</a>
+  <a href="#work">Work</a>
+  <a href="#capabilities">Capabilities</a>
+  <a class="hide-sm" href="#dashboards">Dashboards</a>
+  <a class="hide-sm" href="#demo">Live demo</a>
+  <a class="hide-sm" href="#about">About</a>
+  <a class="cta" href="#contact">Contact</a>
+</nav>
+
+<main class="wrap">
+  <section class="hero" id="top">
+    <div class="meta">
+      <div><span class="label">Role</span>Data Scientist<br>ML and Data Engineering</div>
+      <div><span class="label">Education</span>M.Sc. Data Science<br>Complutense University of Madrid</div>
+      <div><span class="label">Location</span>Hermosillo, Mexico<br>Open to relocation</div>
+      <div><span class="label">Languages</span>Spanish, English C1<br>German B1+</div>
+    </div>
+    <h1>María<span class="second">Carolina<span class="dot2">.</span></span></h1>
+    <div class="statement">
+      <div class="label">About this page</div>
+      <div>
+        <p class="lead">I like turning messy data into tools that people can use.</p>
+        <p class="sub">This page collects my projects in machine learning, natural language processing, data pipelines, statistics and dashboards. Each one links to the code, a live app or a report. For the step-by-step version of each project, see my <a href="https://carolinagles.github.io/DataPortfolio/" target="_blank" rel="noreferrer">Data Portfolio</a>.</p>
+        <a class="btn btn-solid" href="#work">See the projects</a>
+        <a class="btn btn-line" href="#demo">Try the live demo</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="figures glass">
+    <div class="top">
+      <p class="big">1,157,800</p>
+      <p>Spanish and English restaurant reviews from Madrid, cleaned and classified in my main project, covering 10,056 restaurants.</p>
+    </div>
+    <div class="row">
+      <div class="cell"><i style="background:var(--blue)"></i><b>0.808</b><span>Macro F1 on 996 restaurants the model never saw</span></div>
+      <div class="cell"><i style="background:var(--orange)"></i><b>0.879</b><span>Recall on negative reviews</span></div>
+      <div class="cell"><i style="background:var(--pink)"></i><b>0.819</b><span>5-fold cross-validated accuracy, “Pump It Up”</span></div>
+      <div class="cell"><i style="background:var(--green)"></i><b>55</b><span>Peer groups covering 96.7% of comparable restaurants</span></div>
+      <div class="cell"><i style="background:var(--clay)"></i><b>199</b><span>Restaurants with a reputation signal, of 1,017 that could be evaluated</span></div>
+    </div>
+  </div>
+
+  <!-- Work -->
+  <section class="sec" id="work">
+    <div class="tag"><b>01</b>Selected work</div>
+    <div>
+      <h2>Projects.</h2>
+      <p class="intro">Live apps, code and reports. Model results are measured on data the models had not seen.</p>
+    </div>
+  </section>
+
+  <div class="deep glass">
+    <p><b>Want the details?</b> Every project is explained in more depth in my Data Portfolio: the question, each step, the evidence behind the result and its limits.</p>
+    <a class="btn btn-solid" href="https://carolinagles.github.io/DataPortfolio/" target="_blank" rel="noreferrer">Open the Data Portfolio ↗</a>
+  </div>
+
+  <article class="feature glass tinted ink">
+    <div class="grid2">
+      <div>
+        <span class="label">Main project · NLP, machine learning and deployment</span>
+        <h3>What 1.16 million reviews say about Madrid's restaurants</h3>
+        <p>A reputation tool for 10,056 restaurants. It summarises each restaurant, compares it with similar places, flags reputations that declined and classifies any review in Spanish or English, showing how much each word weighed in the decision.</p>
+        <p>The data were split by restaurant, so the final test used places the model had never seen. The model is served through a FastAPI service and tracked in MLflow.</p>
+        <a class="btn btn-solid" href="https://madrid-restaurant-intelligence.streamlit.app/" target="_blank" rel="noreferrer">Open the app ↗</a>
+        <a class="btn btn-line" href="https://github.com/carolinagles/madrid-restaurant-intelligence" target="_blank" rel="noreferrer">Code</a>
+        <a class="btn btn-line" href="https://carolinagles.github.io/DataPortfolio/#restaurants" target="_blank" rel="noreferrer">In depth</a>
+      </div>
+      <div aria-hidden="true">
+        <p class="example-note">Illustrative examples of what the classifier shows</p>
+        <div class="review"><p>“La paella llegó fría y el servicio fue lentísimo.”</p><span class="pill neg">Negative</span></div>
+        <p class="words">Words that weighed most: <mark>fría</mark> <mark>lentísimo</mark></p>
+        <div class="review"><p>“Best tapas we had in Madrid, the staff were lovely.”</p><span class="pill pos">Positive</span></div>
+        <div class="review"><p>“Correcto, sin más. Precio un poco alto.”</p><span class="pill neu">Neutral</span></div>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>110,912</b><span>test reviews from 996 unseen restaurants</span></div>
+      <div><b>0.809 / 0.793</b><span>macro F1 in Spanish and English</span></div>
+      <div><b>0.905</b><span>accuracy on the test set</span></div>
+      <div><b>60,000</b><span>bilingual TF-IDF features</span></div>
+    </div>
+  </article>
+
+  <div class="seg glass filter" role="group" aria-label="Filter projects" id="filter">
+    <button type="button" data-area="All" aria-pressed="true">All</button>
+    <button type="button" data-area="Machine learning" aria-pressed="false">Machine learning</button>
+    <button type="button" data-area="Data engineering" aria-pressed="false">Data engineering</button>
+    <button type="button" data-area="Statistics and BI" aria-pressed="false">Statistics and BI</button>
+    <button type="button" data-area="Apps" aria-pressed="false">Apps</button>
+  </div>
+
+  <div class="cards" id="cards">
+    <article class="card glass" data-areas="Machine learning">
+      <div class="bar" style="background:var(--orange)"></div>
+      <span class="label">Machine learning · Competition</span>
+      <h3>Which water pumps will fail next?</h3>
+      <p>59,400 labeled water points in Tanzania with three possible outcomes. Feature engineering, target encoding fitted on training data only, and gradient boosting tuned with Optuna.</p>
+      <div class="nums"><div><b style="color:var(--orange)">0.819</b><span>5-fold CV accuracy</span></div><div><b style="color:var(--orange)">0.543</b><span>majority-class baseline</span></div></div>
+      <div><a class="btn btn-line" href="https://github.com/carolinagles/PumpItUp/blob/main/PumpItUp_en.ipynb" target="_blank" rel="noreferrer">Code</a><a class="btn btn-line" href="https://carolinagles.github.io/DataPortfolio/#pump" target="_blank" rel="noreferrer">In depth</a></div>
+    </article>
+    <article class="card glass" data-areas="Apps">
+      <div class="bar" style="background:var(--pink)"></div>
+      <span class="label">Python app · Live</span>
+      <h3>Guess the Number, rebuilt as an app</h3>
+      <p>A console game turned into a Streamlit app with game modes, difficulty levels, scoring, saved results and a records screen with a leaderboard and charts.</p>
+      <div class="nums"><div><b style="color:var(--pink)">3</b><span>difficulty levels</span></div><div><b style="color:var(--pink)">6</b><span>modules</span></div></div>
+      <div><a class="btn btn-solid" href="https://guessthenumberrrr.streamlit.app/" target="_blank" rel="noreferrer">Play</a><a class="btn btn-line" href="https://github.com/carolinagles/guessthenumberrrr" target="_blank" rel="noreferrer">Code</a><a class="btn btn-line" href="https://carolinagles.github.io/DataPortfolio/#game" target="_blank" rel="noreferrer">In depth</a></div>
+    </article>
+    <article class="card glass" data-areas="Data engineering|Apps">
+      <div class="bar" style="background:var(--green)"></div>
+      <span class="label">Data engineering · Live app</span>
+      <h3>Hostname Generator: server names on demand</h3>
+      <p>A naming convention turned into a Streamlit app. Generate up to 5,000 hostnames, fix a keyword such as IRL or 007 anywhere in the name, then copy them or download a CSV. With a keyword, the app keeps the original probabilities.</p>
+      <div class="nums"><div><b style="color:var(--green)">1–5,000</b><span>hostnames per request</span></div><div><b style="color:var(--green)">8</b><span>characters, 4 parts</span></div></div>
+      <div><a class="btn btn-solid" href="https://hostnamesapp.streamlit.app/" target="_blank" rel="noreferrer">Open the app</a><a class="btn btn-line" href="https://app.notion.com/p/Hostnames-Generator-2b9fea9d8900807e9deadffe3bdb83ae" target="_blank" rel="noreferrer">Report</a><a class="btn btn-line" href="https://carolinagles.github.io/DataPortfolio/#hostnames" target="_blank" rel="noreferrer">In depth</a></div>
+    </article>
+    <article class="card glass" data-areas="Statistics and BI">
+      <div class="bar" style="background:var(--clay)"></div>
+      <span class="label">Statistics · Health data</span>
+      <h3>Glucose tolerance in young and adult patients</h3>
+      <p>Two groups compared after checking normality and equal variances, with a t-test and confidence intervals, plus a regression that predicts glucose 60 minutes after intake.</p>
+      <div class="nums"><div><b style="color:var(--clay)">0.634</b><span>R²</span></div><div><b style="color:var(--clay)">4.61</b><span>RMSE, mg/dL</span></div></div>
+      <div><a class="btn btn-line" href="https://www.notion.so/Glucose-Levels-307fea9d89008006b054fb9422e09232" target="_blank" rel="noreferrer">Report</a><a class="btn btn-line" href="https://carolinagles.github.io/DataPortfolio/#glucose" target="_blank" rel="noreferrer">In depth</a></div>
+    </article>
+  </div>
+  <div class="empty glass" id="empty" hidden>The main project above covers this area.</div>
+
+  <!-- Capabilities -->
+  <section class="sec" id="capabilities">
+    <div class="tag"><b>02</b>Capabilities</div>
+    <div>
+      <h2>Areas I work in.</h2>
+      <p class="intro">What each area involves, the tools I use and the project where you can see it.</p>
+      <div class="caps glass">
+        <table class="index">
+          <tr><td class="name"><span class="dot" style="background:var(--blue)"></span>Machine learning</td><td class="what">Models evaluated on data they have not seen, split by group to avoid leakage.</td><td class="tools">Scikit-learn, LightGBM, CatBoost, XGBoost, Optuna</td><td class="proof">Restaurant intelligence · Pump It Up</td></tr>
+          <tr><td class="name"><span class="dot" style="background:var(--orange)"></span>Natural language</td><td class="what">Spanish and English text classification, with each prediction explained word by word.</td><td class="tools">TF-IDF, LinearSVC</td><td class="proof">Restaurant intelligence</td></tr>
+          <tr><td class="name"><span class="dot" style="background:var(--pink)"></span>Data engineering</td><td class="what">Data generated, parsed, validated and exported with explicit checks.</td><td class="tools">Pandas, NumPy, Pandera, Parquet</td><td class="proof">Hostname pipeline · Restaurant intelligence</td></tr>
+          <tr><td class="name"><span class="dot" style="background:var(--green)"></span>Deployment</td><td class="what">Models served behind an API and wrapped in small apps.</td><td class="tools">FastAPI, MLflow, Streamlit</td><td class="proof">Restaurant intelligence · Guess the Number · Hostnames</td></tr>
+          <tr><td class="name"><span class="dot" style="background:var(--clay)"></span>Statistics and BI</td><td class="what">Choosing the right test, then showing results in dashboards that are quick to read.</td><td class="tools">Hypothesis testing, regression, Tableau, Plotly</td><td class="proof">Glucose study · Easy Loans</td></tr>
+          <tr><td class="name"><span class="dot" style="background:var(--taupe)"></span>Big data and cloud</td><td class="what">Distributed and cloud tools studied in my M.Sc. at Complutense University of Madrid.</td><td class="tools">PySpark, Spark SQL, MLlib, Google Cloud, MongoDB, Snowflake</td><td class="proof">M.Sc. coursework</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboards -->
+  <section class="sec" id="dashboards">
+    <div class="tag"><b>03</b>Business intelligence</div>
+    <div>
+      <h2>Dashboards.</h2>
+      <p class="intro">Easy Loans: a year of lending across Europe in two interactive Tableau dashboards. Filter by date and country, hover for details and click to cross-filter.</p>
+      <div class="dash-list">
+        <div><b><span class="dot" style="background:var(--blue)"></span>Loan operations</b><span>KPIs, deviation from the average, running total, date and country filters.</span></div>
+        <div><b><span class="dot" style="background:var(--orange)"></span>Merchant analysis</b><span>Top 10 merchants, merchants by country and an interactive map.</span></div>
+        <div><b><span class="dot" style="background:var(--green)"></span>Details</b><span>LOD and table calculations, a minimum-amount parameter and reset buttons.</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="bi glass">
+    <div class="bi-top">
+      <div class="seg" role="group" aria-label="Dashboard" id="dash-seg">
+        <button type="button" aria-pressed="true" data-src="https://public.tableau.com/views/EasyLoans_17918449786600/LOANOPERATIONS">Loan operations</button>
+        <button type="button" aria-pressed="false" data-src="https://public.tableau.com/views/EasyLoans-TopMerchants/MERCHANTANALYSIS">Merchant analysis</button>
+      </div>
+      <a class="btn btn-line" href="https://public.tableau.com/app/profile/maria.carolina.gonzalez.bernal" target="_blank" rel="noreferrer">Open in Tableau Public ↗</a>
+    </div>
+    <div class="bi-frame"><iframe id="dash-frame" title="Easy Loans dashboard" loading="lazy" allowfullscreen
+      src="https://public.tableau.com/views/EasyLoans_17918449786600/LOANOPERATIONS?:showVizHome=no&amp;:embed=true&amp;:toolbar=bottom"></iframe></div>
+  </div>
+
+  <!-- Live demo -->
+  <section class="sec" id="demo">
+    <div class="tag"><b>04</b>Live demo</div>
+    <div>
+      <h2>A small pipeline you can try.</h2>
+      <p class="intro">Generate a server inventory with the naming convention from my <a href="https://hostnamesapp.streamlit.app/" target="_blank" rel="noreferrer">Hostname Generator</a>, then see it parsed into fields and checked for quality. It runs in your browser.</p>
+    </div>
+  </section>
+  <div class="demo glass">
+    <div class="controls simple">
+      <div><label for="n-hosts">Servers to generate <output id="n-out" for="n-hosts">1,500</output></label>
+        <input id="n-hosts" type="range" min="100" max="5000" step="100" value="1500"></div>
+      <div><button type="button" class="btn btn-line" id="regen">Generate again</button></div>
+      <p class="hint wide">Each run checks five things: the expected columns, 8 characters per hostname, every field decoded, node numbers from 001 to 999 and no duplicate names.</p>
+    </div>
+    <div class="steps">
+      <div><i style="background:var(--blue)"></i><span>1 · Generate</span><b id="s-gen">0</b><span>hostnames</span></div>
+      <div><i style="background:var(--clay)"></i><span>2 · Parse</span><b>5</b><span>structured fields</span></div>
+      <div><i style="background:var(--green)"></i><span>3 · Validate</span><b id="s-val">0/5</b><span>checks passed</span></div>
+    </div>
+    <div class="demo-grid">
+      <div>
+        <div id="checks"></div>
+        <p class="dup" id="dup" hidden></p>
+        <p class="gap">Largest gap from the target mix: <b id="worst">0</b></p>
+        <a class="btn btn-solid" id="download" href="#" download="hosts.csv">Download the CSV</a>
+      </div>
+      <div>
+        <div class="chart-head">
+          <div class="seg" role="group" aria-label="Target vs observed" id="field-seg">
+            <button type="button" data-field="os" aria-pressed="false">OS</button>
+            <button type="button" data-field="environment" aria-pressed="true">Environment</button>
+            <button type="button" data-field="country" aria-pressed="false">Country</button>
+          </div>
+          <div class="legend"><span><i style="background:#D5DCE4"></i>Target</span><span><i style="background:var(--red)"></i>Observed</span></div>
+        </div>
+        <div id="dist-chart"></div>
+      </div>
+    </div>
+    <p class="chart-title">Servers by country and environment</p>
+    <div class="legend" id="env-legend"></div>
+    <div id="stack-chart"></div>
+    <details class="preview"><summary>Preview the parsed data</summary><div class="table-wrap" id="preview"></div></details>
+  </div>
+
+  <!-- About -->
+  <section class="sec" id="about">
+    <div class="tag"><b>05</b>About</div>
+    <div>
+      <h2>About me.</h2>
+      <p class="intro">How I like to work, and the path that brought me here.</p>
+      <div class="cols">
+        <div><h4>Questions first</h4><p>Anthropology taught me to interview, observe and define the problem before choosing a method.</p></div>
+        <div><h4>Careful validation</h4><p>Separate test data, leakage checks and quality tests, to understand what a model can and cannot do.</p></div>
+        <div><h4>Languages</h4><p>Spanish (native), English (C1) and German (B1+), which I keep studying.</p></div>
+      </div>
+      <div class="timeline glass">
+        <table class="path">
+          <tr class="now"><td class="year">2025–2026</td><td class="what">M.Sc. Data Science, Big Data &amp; Business Analytics</td><td class="where">Complutense University of Madrid</td></tr>
+          <tr><td class="year">2024–2025</td><td class="what">Data Science Bootcamp</td><td class="where">TripleTen</td></tr>
+          <tr><td class="year">2024</td><td class="what">Survey data analysis, internship</td><td class="where">Hermosillo City Hall</td></tr>
+          <tr><td class="year">2023</td><td class="what">Social development research, internship</td><td class="where">Ministry of Social Development of Sonora</td></tr>
+          <tr><td class="year">2019–2024</td><td class="what">B.A. Anthropology</td><td class="where">University of Sonora</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact glass tinted red" id="contact">
+    <h2>Let's talk.</h2>
+    <div class="rowc">
+      <p>Open to Data Scientist, ML and Data Engineering roles. I would be glad to hear from you.</p>
+      <div><a class="mail" href="mailto:Carolinagles@gmail.com">Carolinagles@gmail.com</a></div>
+    </div>
+  </section>
+  <div class="foot"><span>María Carolina González Bernal</span><span>Built with HTML, CSS and JavaScript</span></div>
+</main>
+
+<script>
+/* ---------- Project filter ---------- */
+(function () {
+  var buttons = document.querySelectorAll('#filter button');
+  var cards = document.querySelectorAll('#cards .card');
+  var empty = document.getElementById('empty');
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var area = b.dataset.area, shown = 0;
+      buttons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      cards.forEach(function (c) {
+        var on = area === 'All' || c.dataset.areas.split('|').indexOf(area) > -1;
+        c.hidden = !on; if (on) shown++;
+      });
+      empty.hidden = shown > 0;
+    });
+  });
+})();
+
+/* ---------- Tableau switcher ---------- */
+(function () {
+  var buttons = document.querySelectorAll('#dash-seg button');
+  var frame = document.getElementById('dash-frame');
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      buttons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      frame.src = b.dataset.src + '?:showVizHome=no&:embed=true&:toolbar=bottom';
+    });
+  });
+})();
+
+/* ---------- Live demo: generate, parse, validate ---------- */
+(function () {
+  var OS = { L: ['Linux', .40], S: ['Solaris', .30], A: ['AIX', .20], H: ['HP-UX', .10] };
+  var ENV = { D: ['Development', .10], I: ['Integration', .10], T: ['Testing', .25], S: ['Staging', .25], P: ['Production', .30] };
+  var COUNTRY = { NOR: ['Norway', .06], FRA: ['France', .09], ITA: ['Italy', .16], ESP: ['Spain', .16], GER: ['Germany', .23], IRL: ['Ireland', .30] };
+  var MAPS = { os: OS, environment: ENV, country: COUNTRY };
+  var ENV_COLORS = ['#111827', '#0F766E', '#5FA8A0', '#94A3B8', '#CBD5E1'];
+
+  function rng(seed) { // mulberry32: same seed, same inventory
+    var a = seed >>> 0;
+    return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  function pick(r, map) {
+    var x = r(), acc = 0, keys = Object.keys(map);
+    for (var i = 0; i < keys.length; i++) { acc += map[keys[i]][1]; if (x < acc) return keys[i]; }
+    return keys[keys.length - 1];
+  }
+  function generate(n, seed, unique) {
+    var r = rng(seed), out = [], seen = new Set(), guard = 0;
+    while (out.length < n && guard < n * 50) {
+      guard++;
+      var node = String(1 + Math.floor(r() * 999)).padStart(3, '0');
+      var name = pick(r, OS) + pick(r, ENV) + pick(r, COUNTRY) + node;
+      if (unique && seen.has(name)) continue;
+      seen.add(name); out.push(name);
+    }
+    return out;
+  }
+  function parse(names) {
+    return names.map(function (h) {
+      return { hostname: h, os: (OS[h[0]] || [null])[0], environment: (ENV[h[1]] || [null])[0],
+               country: (COUNTRY[h.slice(2, 5)] || [null])[0], node: parseInt(h.slice(5, 8), 10) };
+    });
+  }
+  function validate(rows) {
+    var names = rows.map(function (r) { return r.hostname; });
+    var duplicates = names.length - new Set(names).size;
+    var checks = [
+      ['Expected columns present', rows.length === 0 || Object.keys(rows[0]).join() === 'hostname,os,environment,country,node'],
+      ['Every hostname has 8 characters', names.every(function (h) { return h.length === 8; })],
+      ['Every field parsed', rows.every(function (r) { return r.os && r.environment && r.country && !isNaN(r.node); })],
+      ['Node numbers within 001–999', rows.every(function (r) { return r.node >= 1 && r.node <= 999; })],
+      ['No duplicate hostnames', duplicates === 0]
+    ];
+    var dist = {}, worst = 0;
+    Object.keys(MAPS).forEach(function (field) {
+      var counts = {};
+      rows.forEach(function (r) { counts[r[field]] = (counts[r[field]] || 0) + 1; });
+      dist[field] = Object.keys(MAPS[field]).map(function (k) {
+        var label = MAPS[field][k][0], target = MAPS[field][k][1], observed = (counts[label] || 0) / rows.length;
+        worst = Math.max(worst, Math.abs(observed - target) * 100);
+        return { label: label, target: target, observed: observed };
+      });
+    });
+    return { checks: checks, duplicates: duplicates, dist: dist, worst: worst };
+  }
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function axis(svg, W, H, L, B, T, max, fmt) {
+    for (var i = 0; i <= 4; i++) {
+      var v = max * i / 4, y = H - B - (H - B - T) * i / 4;
+      svg.appendChild(el('line', { x1: L, x2: W, y1: y, y2: y, class: 'grid' }));
+      svg.appendChild(el('text', { x: L - 8, y: y + 4, 'text-anchor': 'end', class: 'muted' }, fmt(v)));
+    }
+  }
+  function groupedChart(data) {
+    var W = 640, H = 300, L = 44, B = 34, T = 10;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'chart', role: 'img', 'aria-label': 'Target versus observed share' });
+    var max = Math.max.apply(null, data.map(function (d) { return Math.max(d.target, d.observed); })) * 100;
+    max = Math.ceil(max / 20) * 20 || 20;
+    axis(svg, W, H, L, B, T, max, function (v) { return Math.round(v) + '%'; });
+    var slot = (W - L) / data.length, bw = Math.min(34, slot * .32);
+    data.forEach(function (d, i) {
+      var cx = L + slot * i + slot / 2;
+      [['target', '#D5DCE4', -1], ['observed', '#0F766E', 1]].forEach(function (s) {
+        var h = (H - B - T) * (d[s[0]] * 100) / max;
+        var x = s[2] < 0 ? cx - bw - 2 : cx + 2;
+        var r = el('rect', { x: x, y: H - B - h, width: bw, height: Math.max(h, 0), rx: 3, fill: s[1] });
+        r.appendChild(el('title', {}, d.label + ', ' + s[0] + ': ' + (d[s[0]] * 100).toFixed(1) + '%'));
+        svg.appendChild(r);
+      });
+      svg.appendChild(el('text', { x: cx, y: H - 12, 'text-anchor': 'middle' }, d.label));
+    });
+    return svg;
+  }
+  function stackedChart(rows) {
+    var countries = Object.keys(COUNTRY).map(function (k) { return COUNTRY[k][0]; });
+    var envs = Object.keys(ENV).map(function (k) { return ENV[k][0]; });
+    var table = {};
+    countries.forEach(function (c) { table[c] = {}; envs.forEach(function (e) { table[c][e] = 0; }); });
+    rows.forEach(function (r) { if (table[r.country]) table[r.country][r.environment]++; });
+    var totals = countries.map(function (c) { return envs.reduce(function (s, e) { return s + table[c][e]; }, 0); });
+    var W = 900, H = 300, L = 48, B = 34, T = 10;
+    var max = Math.max.apply(null, totals.concat([1]));
+    var step = Math.pow(10, Math.floor(Math.log10(max))) / 2; max = Math.ceil(max / step) * step;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'chart', role: 'img', 'aria-label': 'Servers by country and environment' });
+    axis(svg, W, H, L, B, T, max, function (v) { return Math.round(v).toLocaleString('en-US'); });
+    var slot = (W - L) / countries.length, bw = slot * .52;
+    countries.forEach(function (c, i) {
+      var x = L + slot * i + (slot - bw) / 2, y = H - B;
+      envs.forEach(function (e, j) {
+        var h = (H - B - T) * table[c][e] / max;
+        y -= h;
+        var r = el('rect', { x: x, y: y, width: bw, height: Math.max(h, 0), fill: ENV_COLORS[j] });
+        r.appendChild(el('title', {}, c + ', ' + e + ': ' + table[c][e]));
+        svg.appendChild(r);
+      });
+      svg.appendChild(el('text', { x: x + bw / 2, y: H - 12, 'text-anchor': 'middle' }, c));
+    });
+    return svg;
+  }
+
+  var nIn = document.getElementById('n-hosts'), nOut = document.getElementById('n-out');
+  var fieldButtons = document.querySelectorAll('#field-seg button');
+  var field = 'environment', report = null, csvUrl = null;
+
+  document.getElementById('env-legend').innerHTML = Object.keys(ENV).map(function (k, j) {
+    return '<span><i style="background:' + ENV_COLORS[j] + '"></i>' + ENV[k][0] + '</span>';
+  }).join('');
+
+  function run() {
+    var n = parseInt(nIn.value, 10), seed = Math.floor(Math.random() * 4294967295);
+    nOut.textContent = n.toLocaleString('en-US');
+    var rows = parse(generate(n, seed, true));
+    report = validate(rows);
+    var passed = report.checks.filter(function (c) { return c[1]; }).length;
+    document.getElementById('s-gen').textContent = rows.length.toLocaleString('en-US');
+    document.getElementById('s-val').textContent = passed + '/' + report.checks.length;
+    document.getElementById('checks').innerHTML = report.checks.map(function (c) {
+      return '<div class="check"><span class="' + (c[1] ? 'ok">✓' : 'ko">✕') + '</span>' + c[0] + '</div>';
+    }).join('');
+    var dup = document.getElementById('dup');
+    dup.hidden = !report.duplicates;
+    dup.textContent = report.duplicates + ' duplicate hostnames found.';
+    document.getElementById('worst').textContent = report.worst.toFixed(1) + ' percentage points';
+    drawDist();
+    var stack = document.getElementById('stack-chart'); stack.replaceChildren(stackedChart(rows));
+    var head = '<tr><th>hostname</th><th>os</th><th>environment</th><th>country</th><th>node</th></tr>';
+    document.getElementById('preview').innerHTML = '<table>' + head + rows.slice(0, 50).map(function (r) {
+      return '<tr><td>' + r.hostname + '</td><td>' + r.os + '</td><td>' + r.environment + '</td><td>' + r.country + '</td><td>' + r.node + '</td></tr>';
+    }).join('') + '</table>';
+    var csv = 'hostname,os,environment,country,node\n' + rows.map(function (r) {
+      return [r.hostname, r.os, r.environment, r.country, r.node].join(',');
+    }).join('\n');
+    if (csvUrl) URL.revokeObjectURL(csvUrl);
+    csvUrl = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    document.getElementById('download').href = csvUrl;
+  }
+  function drawDist() {
+    document.getElementById('dist-chart').replaceChildren(groupedChart(report.dist[field]));
+  }
+  fieldButtons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      field = b.dataset.field;
+      fieldButtons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      drawDist();
+    });
+  });
+  nIn.addEventListener('input', run);
+  document.getElementById('regen').addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>
