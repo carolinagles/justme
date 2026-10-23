@@ -457,6 +457,57 @@ section.contact.glass.tinted.red p { max-width:52ch; }
   .aurora .a1 { width:90vw; height:90vw; } .aurora .a2 { width:80vw; height:80vw; } .aurora .a3 { width:80vw; height:80vw; }
 }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } * { transition:none !important; } .hero h1 .dot2::before { animation:none; } }
+
+/* ---------- SKILLS: franja en portada ---------- */
+.skillbar{margin-top:1.2rem;padding:1.1rem 1.3rem;display:flex;align-items:center;gap:1.1rem 1.6rem;flex-wrap:wrap}
+.skillbar .label{font-weight:500;color:var(--ink);white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip{display:inline-flex;align-items:center;gap:.45rem;font:500 .84rem var(--body);padding:.42rem .85rem;border-radius:999px;background:#fff;color:var(--ink);
+  border:1px solid var(--border);text-decoration:none;transition:transform .15s,background .2s,color .2s,border-color .2s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--c,#111);flex:none}
+a.chip:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-1px)}
+a.chip:hover i{box-shadow:0 0 0 1.5px #fff}
+.chip.tool{font-weight:400;font-size:.8rem;padding:.3rem .65rem;background:var(--media-bg);box-shadow:none}
+.skillbar .more{margin-left:auto;font-size:.85rem;font-weight:500;color:var(--ink);text-underline-offset:4px}
+
+/* ---------- SKILLS: tarjetas ---------- */
+.caps{display:none}
+.skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--grid-gap)}
+.skill{padding:1.5rem 1.5rem 1.3rem;display:flex;flex-direction:column;gap:.9rem;border-radius:var(--r-lg);transition:transform .25s,box-shadow .25s;--c:#111}
+.skill:hover{transform:translateY(-3px)}
+.skill .top{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+.skill .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--c);flex:none}
+.skill .ico svg{width:22px;height:22px;fill:none;stroke:#111;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.skill .lvl{font-size:.72rem;font-weight:500;padding:.25rem .6rem;border-radius:999px;background:#111;color:#fff}
+.skill .lvl.soft{background:var(--media-bg);color:var(--ink)}
+.skill h3{font-family:var(--display);font-size:1.45rem;font-weight:500;letter-spacing:-.035em;line-height:1.1;color:var(--ink)}
+.skill p{font-size:.93rem;line-height:1.55;color:var(--muted)}
+.skill .chips{margin-top:auto}
+.skill .proof{border-top:1px solid var(--hair);padding-top:.8rem;font-size:.8rem;color:var(--muted);display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.skill .proof a{color:var(--ink);font-weight:500;text-underline-offset:3px}
+@media (max-width:1100px){.skill-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){.skill-grid{grid-template-columns:1fr}.skillbar .more{margin-left:0}}
+
+/* ---------- CONTACTO: versión sobria y elegante ---------- */
+section.contact.glass.tinted.red{--serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  background:radial-gradient(70% 90% at 100% 0%,rgba(156,149,201,.16),transparent 60%),#111;color:#fff;border:0;border-radius:var(--radius);
+  padding:clamp(3rem,7vw,6.5rem) clamp(1.5rem,5vw,5rem) clamp(2rem,4vw,3.2rem)}
+section.contact.glass.tinted.red::before{display:none}
+section.contact.glass.tinted.red h2{font-family:var(--serif);font-weight:400;font-style:italic;color:#fff;background:none;padding:0;margin:0 0 clamp(2.5rem,5vw,4rem);
+  font-size:clamp(3.6rem,10vw,8.5rem);letter-spacing:-.04em;line-height:.95}
+section.contact.glass.tinted.red .rowc{max-width:none;display:grid;grid-template-columns:1fr 1.5fr;gap:2rem 4rem;align-items:start;
+  background:none;border:0;border-top:1px solid rgba(255,255,255,.22);border-radius:0;box-shadow:none;padding:1.8rem 0 0}
+section.contact.glass.tinted.red p{color:rgba(255,255,255,.7);font-size:1.02rem;line-height:1.65;max-width:34ch}
+section.contact.glass.tinted.red .foot-links{display:flex;flex-direction:column;gap:0;border:0;padding:0;grid-column:auto}
+section.contact.glass.tinted.red .foot-link{display:flex;justify-content:space-between;align-items:center;gap:1rem;background:none;border:0;border-radius:0;
+  border-bottom:1px solid rgba(255,255,255,.16);padding:1.05rem 0;color:#fff;font-size:1.05rem;font-weight:400;letter-spacing:-.01em;transition:padding .25s,color .2s}
+section.contact.glass.tinted.red .foot-link:first-child{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.2rem);padding:.2rem 0 1.2rem}
+section.contact.glass.tinted.red .foot-link svg{display:none}
+section.contact.glass.tinted.red .foot-link::after{content:"↗";font-size:1.1em;opacity:.55;transition:transform .25s,opacity .25s;flex:none}
+section.contact.glass.tinted.red .foot-link:hover{background:none;color:#fff;padding-left:.6rem}
+section.contact.glass.tinted.red .foot-link:hover::after{opacity:1;transform:translate(3px,-3px)}
+@media (max-width:860px){section.contact.glass.tinted.red .rowc{grid-template-columns:1fr}
+  section.contact.glass.tinted.red .foot-link:first-child{word-break:break-all}}
 </style>
 </head>
 <body>
@@ -465,7 +516,7 @@ section.contact.glass.tinted.red p { max-width:52ch; }
 <nav class="nav glass" aria-label="Main">
   <a class="brand" href="#top"><i></i>María Carolina</a>
   <a href="#work">Work</a>
-  <a href="#capabilities">Capabilities</a>
+  <a href="#capabilities">Skills</a>
   <a class="hide-sm" href="#dashboards">Dashboards</a>
   <a class="hide-sm" href="#demo">Live demo</a>
   <a class="hide-sm" href="#about">About</a>
@@ -491,6 +542,19 @@ section.contact.glass.tinted.red p { max-width:52ch; }
       </div>
     </div>
   </section>
+
+  <div class="skillbar glass" aria-label="Top skills">
+    <span class="label">Core skills</span>
+    <div class="chips">
+      <a class="chip" style="--c:#111" href="#capabilities"><i></i>Machine learning</a>
+      <a class="chip" style="--c:#9C95C9" href="#capabilities"><i></i>NLP</a>
+      <a class="chip" style="--c:#9FB9D3" href="#capabilities"><i></i>Data engineering</a>
+      <a class="chip" style="--c:#9CC4B3" href="#capabilities"><i></i>Deployment</a>
+      <a class="chip" style="--c:#D6AEB5" href="#capabilities"><i></i>Statistics &amp; BI</a>
+      <a class="chip" style="--c:#BEB8A7" href="#capabilities"><i></i>Big data &amp; cloud</a>
+    </div>
+    <a class="more" href="#capabilities">See all skills →</a>
+  </div>
 
   <div class="figures glass">
     <div class="top">
@@ -593,20 +657,18 @@ section.contact.glass.tinted.red p { max-width:52ch; }
 
   <!-- Capabilities -->
   <section class="sec" id="capabilities">
-    <div class="tag"><b>02</b>Capabilities</div>
+    <div class="tag"><b>02</b>Skills</div>
     <div>
-      <h2>Areas I work in.</h2>
-      <p class="intro">What each area involves, the tools I use and the project where you can see it.</p>
-      <div class="caps glass">
-        <table class="index">
-          <tr><td class="name"><span class="dot" style="background:var(--blue)"></span>Machine learning</td><td class="what">Models evaluated on data they have not seen, split by group to avoid leakage.</td><td class="tools">Scikit-learn, LightGBM, CatBoost, Optuna</td><td class="proof">Restaurant intelligence · Pump It Up</td></tr>
-          <tr><td class="name"><span class="dot" style="background:var(--orange)"></span>Natural language</td><td class="what">Spanish and English text classification, with each prediction explained word by word.</td><td class="tools">TF-IDF, LinearSVC</td><td class="proof">Restaurant intelligence</td></tr>
-          <tr><td class="name"><span class="dot" style="background:var(--pink)"></span>Data engineering</td><td class="what">Data generated, parsed, validated and exported with explicit checks.</td><td class="tools">Pandas, NumPy, Pandera, Parquet</td><td class="proof">Hostname pipeline · Restaurant intelligence</td></tr>
-          <tr><td class="name"><span class="dot" style="background:var(--green)"></span>Deployment</td><td class="what">Models served behind an API and wrapped in small apps.</td><td class="tools">FastAPI, MLflow, Streamlit</td><td class="proof">Restaurant intelligence · Guess the Number · Hostnames</td></tr>
-          <tr><td class="name"><span class="dot" style="background:var(--clay)"></span>Statistics and BI</td><td class="what">Choosing the right test, then showing results in dashboards that are quick to read.</td><td class="tools">Hypothesis testing, regression, Tableau, Seaborn</td><td class="proof">Glucose study · Easy Loans</td></tr>
-          <tr><td class="name"><span class="dot" style="background:var(--taupe)"></span>Big data and cloud</td><td class="what">Distributed and cloud tools studied in my Master at Complutense University of Madrid.</td><td class="tools">PySpark, Spark SQL, MLlib, Google Cloud, MongoDB, Snowflake</td><td class="proof">Master coursework</td></tr>
-        </table>
-      </div>
+      <h2>What I do well.</h2>
+      <p class="intro">Six areas, the tools behind each one and the projects where you can see them in action.</p>
+      <div class="skill-grid">
+<article class="skill glass" style="--c:#9C95C9"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="8" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6l8 2M7 8l1 8M10 18h6M18 10v6"/></svg></span><span class="lvl">Core</span></div><h3>Machine learning</h3><p>Models evaluated on data they have not seen, split by group to avoid leakage.</p><div class="chips"><span class="chip tool">Scikit-learn</span><span class="chip tool">LightGBM</span><span class="chip tool">CatBoost</span><span class="chip tool">Optuna</span></div><div class="proof">Seen in: <a href="#work">Restaurant intelligence</a> · <a href="#work">Pump It Up</a></div></article>
+<article class="skill glass" style="--c:#E3EEF8"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span><span class="lvl">Core</span></div><h3>Natural language</h3><p>Spanish and English text classification, with each prediction explained word by word.</p><div class="chips"><span class="chip tool">TF-IDF</span><span class="chip tool">LinearSVC</span></div><div class="proof">Seen in: <a href="#work">Restaurant intelligence</a></div></article>
+<article class="skill glass" style="--c:#9FB9D3"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span><span class="lvl">Core</span></div><h3>Data engineering</h3><p>Data generated, parsed, validated and exported with explicit checks.</p><div class="chips"><span class="chip tool">Pandas</span><span class="chip tool">NumPy</span><span class="chip tool">Pandera</span><span class="chip tool">Parquet</span></div><div class="proof">Seen in: <a href="#work">Hostname pipeline</a> · <a href="#work">Restaurant intelligence</a></div></article>
+<article class="skill glass" style="--c:#9CC4B3"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 1 5 4 5 8l-2 4H9l-2-4c0-4 2-7 5-8z"/><circle cx="12" cy="10" r="1.5"/><path d="M9 15l-2 4 3-1M15 15l2 4-3-1"/></svg></span><span class="lvl">Core</span></div><h3>Deployment</h3><p>Models served behind an API and wrapped in small apps.</p><div class="chips"><span class="chip tool">FastAPI</span><span class="chip tool">MLflow</span><span class="chip tool">Streamlit</span></div><div class="proof">Seen in: <a href="#work">Restaurant intelligence</a> · <a href="#work">Guess the Number</a> · <a href="#work">Hostnames</a></div></article>
+<article class="skill glass" style="--c:#D6AEB5"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg></span><span class="lvl">Core</span></div><h3>Statistics and BI</h3><p>Choosing the right test, then showing results in dashboards that are quick to read.</p><div class="chips"><span class="chip tool">Hypothesis testing</span><span class="chip tool">Regression</span><span class="chip tool">Tableau</span><span class="chip tool">Seaborn</span></div><div class="proof">Seen in: <a href="#work">Glucose study</a> · <a href="#work">Easy Loans</a></div></article>
+<article class="skill glass" style="--c:#BEB8A7"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 010-8 5 5 0 019.6-1A3.5 3.5 0 0117 18z"/></svg></span><span class="lvl soft">Studying</span></div><h3>Big data and cloud</h3><p>Distributed and cloud tools studied in my Master at Complutense University of Madrid.</p><div class="chips"><span class="chip tool">PySpark</span><span class="chip tool">Spark SQL</span><span class="chip tool">MLlib</span><span class="chip tool">Google Cloud</span><span class="chip tool">MongoDB</span><span class="chip tool">Snowflake</span></div><div class="proof">Seen in: <a href="#work">Master coursework</a></div></article>
+</div>
     </div>
   </section>
 
@@ -706,7 +768,7 @@ section.contact.glass.tinted.red p { max-width:52ch; }
   <section class="contact glass tinted red" id="contact">
     <h2>Let's talk.</h2>
     <div class="rowc">
-      <p>Open to Data Scientist, ML and Data Engineering roles. I would be glad to hear from you.</p>
+      <p>Open to Data Scientist, ML and Data Engineering roles. For professional opportunities, collaborations or enquiries about my work, please get in touch through any of the channels listed here.</p>
       
       <nav class="foot-links" aria-label="Elsewhere">
         <a class="foot-link" href="mailto:Carolinagles@gmail.com">
